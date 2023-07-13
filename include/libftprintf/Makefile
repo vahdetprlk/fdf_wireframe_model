@@ -3,7 +3,7 @@ NAME	= libftprintf.a
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror -g
 
-FILES	= $(shell find . -type f -name "ft_*.c")
+FILES	= ft_printf.c
 OBJ		= $(FILES:%.c=%.o)
 
 all: $(NAME)
@@ -12,7 +12,7 @@ $(NAME): $(OBJ)
 	@ar -rc $(NAME) $(OBJ)
 
 clean:
-	@rm -f *.o
+	@rm -f $(OBJ)
 
 fclean: clean
 	@rm -f $(NAME)

@@ -3,7 +3,9 @@ NAME	= libftgetnextline.a
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror -g
 
-FILES	= $(shell find . -type f -name "*.c")
+FILES	= get_next_line.c \
+		  get_next_line_utils.c
+
 OBJ		= $(FILES:%.c=%.o)
 
 all: $(NAME)
@@ -12,7 +14,7 @@ $(NAME): $(OBJ)
 	@ar -rc $(NAME) $(OBJ)
 
 clean:
-	@rm -f *.o
+	@rm -f $(OBJ)
 
 fclean: clean
 	@rm -f $(NAME)
