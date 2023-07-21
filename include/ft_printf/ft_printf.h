@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/24 04:50:25 by vparlak           #+#    #+#             */
-/*   Updated: 2022/12/24 23:10:58 by vparlak          ###   ########.fr       */
+/*   Created: 2023/03/10 19:05:19 by vparlak           #+#    #+#             */
+/*   Updated: 2023/07/21 20:32:45 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
+# include <stddef.h>
 
-char	*ft_strdup(const char *s1)
-{
-	size_t	len_s1;
-	char	*dst;
+int	ft_printf(const char *format, ...);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
+int	ft_putchar_fd(char c, int fd);
+int	ft_puthex_fd(unsigned long hex, int fd, int is_upper);
+int	ft_putstr_fd(char *s, int fd);
+int	ft_putnbr_fd(long n, int fd);
 
-	len_s1 = ft_strlen(s1) + 1;
-	dst = (char *)malloc(len_s1);
-	if (dst == NULL)
-		return (dst);
-	ft_strlcpy(dst, s1, len_s1);
-	return (dst);
-}
+#endif

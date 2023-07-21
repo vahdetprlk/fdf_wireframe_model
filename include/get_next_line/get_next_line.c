@@ -6,11 +6,12 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 23:25:39 by vparlak           #+#    #+#             */
-/*   Updated: 2023/07/09 20:37:49 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/07/21 20:20:59 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <unistd.h>
 
 char	*ft_read_to_left_str(int fd, char *left_str)
 {

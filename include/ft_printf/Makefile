@@ -3,7 +3,9 @@ NAME	= libftprintf.a
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror -g
 
-FILES	= ft_printf.c
+FILES	= ft_printf.c \
+			utils.c \
+			
 OBJ		= $(FILES:%.c=%.o)
 
 all: $(NAME)

@@ -6,14 +6,14 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 15:18:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/07/13 14:41:30 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/07/21 20:28:12 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-
-int main() {
-    ft_printf("hello world\n");
-    return 0;
+int	main(void)
+{
+	ft_printf("hello world\n");
+	return (0);
 }

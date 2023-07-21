@@ -6,11 +6,39 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 23:25:46 by vparlak           #+#    #+#             */
-/*   Updated: 2023/07/09 20:39:22 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/07/21 20:21:46 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*ft_get_line(char *left_str)
+{
+	int		i;
+	char	*str;
+
+	i = 0;
+	if (!left_str[i])
+		return (NULL);
+	while (left_str[i] && left_str[i] != '\n')
+		i++;
+	str = (char *)malloc(sizeof(char) * (i + 2));
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (left_str[i] && left_str[i] != '\n')
+	{
+		str[i] = left_str[i];
+		i++;
+	}
+	if (left_str[i] == '\n')
+	{
+		str[i] = left_str[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
 
 size_t	ft_strlen_gnl(char *s)
 {
@@ -68,34 +96,6 @@ char	*ft_strjoin_gnl(char *left_str, char *buff)
 		str[i++] = buff[j++];
 	str[ft_strlen_gnl(left_str) + ft_strlen_gnl(buff)] = '\0';
 	free(left_str);
-	return (str);
-}
-
-char	*ft_get_line(char *left_str)
-{
-	int		i;
-	char	*str;
-
-	i = 0;
-	if (!left_str[i])
-		return (NULL);
-	while (left_str[i] && left_str[i] != '\n')
-		i++;
-	str = (char *)malloc(sizeof(char) * (i + 2));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (left_str[i] && left_str[i] != '\n')
-	{
-		str[i] = left_str[i];
-		i++;
-	}
-	if (left_str[i] == '\n')
-	{
-		str[i] = left_str[i];
-		i++;
-	}
-	str[i] = '\0';
 	return (str);
 }
 

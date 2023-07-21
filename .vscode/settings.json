@@ -1,6 +1,10 @@
 {
 	"files.associations": {
 		"fdf.h": "c",
-		"ft_printf.h": "c"
+		"ft_printf.h": "c",
+		"strings.h": "c",
+		"stddef.h": "c",
+		"istream": "c",
+		"locale": "c"
 	}
 }

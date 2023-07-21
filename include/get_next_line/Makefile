@@ -1,4 +1,4 @@
-NAME	= libftgetnextline.a
+NAME	= libgetnextline.a
 
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror -g
