@@ -27,7 +27,7 @@
 			"label": "make fdf",
 			"type": "shell",
 			"command": "make",
-			"args": ["fdf"],  // fdf hedefine bağlı olarak Makefile'ı çalıştırıyoruz
+			"args": ["fdf"],
 			"group": {
 				"kind": "build",
 				"isDefault": true

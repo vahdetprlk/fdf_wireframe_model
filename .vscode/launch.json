@@ -12,7 +12,7 @@
 			"environment": [],
 			"externalConsole": false,
 			"MIMode": "lldb",
-			"preLaunchTask": "make fdf"  // make komutunu buraya ekledik
+			"preLaunchTask": "make fdf"
 		}
 	]
 }
