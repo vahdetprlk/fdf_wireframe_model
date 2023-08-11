@@ -6,107 +6,111 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 20:12:30 by vparlak           #+#    #+#             */
-/*   Updated: 2023/08/06 21:17:37 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/08/11 14:33:29 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "mlx.h"
+#include <math.h>
+#include <stdlib.h>
 
-void	put_line(t_window window, t_point p_a, t_point p_b, int color)
+#define WIDTH 800
+#define HEIGHT 600
+// Yardımcı fonksiyonlar
+int	my_round(float x)
 {
-	int	i;
-	int	j;
-	int	k;
-
-	if (p_a.y == p_b.y)
-	{
-		if (p_a.x < p_b.x)
-		{
-			i = p_a.x;
-			while (i <= p_b.x)
-			{
-				mlx_pixel_put(window.mlx, window.win, i, p_a.y, color);
-				i++;
-			}
-		}
-		else if (p_a.x > p_b.x)
-		{
-			i = p_b.x;
-			while (i <= p_a.x)
-			{
-				mlx_pixel_put(window.mlx, window.win, i, p_a.y, color);
-				i++;
-			}
-		}
-	}
-	else if (p_a.x == p_b.x)
-	{
-		if (p_a.y < p_b.y)
-		{
-			i = p_a.y;
-			while (i <= p_b.y)
-			{
-				mlx_pixel_put(window.mlx, window.win, p_a.x, i, color);
-				i++;
-			}
-		}
-		else if (p_a.y > p_b.y)
-		{
-			i = p_b.y;
-			while (i <= p_a.y)
-			{
-				mlx_pixel_put(window.mlx, window.win, p_a.x, i, color);
-				i++;
-			}
-		}
-	}
-	else
-	{
-		j = 0;
-		i = 0;
-		while (i < 100)
-		{
-			mlx_pixel_put(window.mlx, window.win, i, j - 4, 0xAAFFFFFF);
-			mlx_pixel_put(window.mlx, window.win, i, j - 3, 0x88FFFFFF);
-			mlx_pixel_put(window.mlx, window.win, i, j - 2, 0x55FFFFFF);
-			mlx_pixel_put(window.mlx, window.win, i, j - 1, 0x33FFFFFF);
-			k = 0;
-			while (k < 1)
-			{
-				mlx_pixel_put(window.mlx, window.win, i, j, 0x00FFFFFF);
-				j++;
-				k++;
-			}
-			mlx_pixel_put(window.mlx, window.win, i, j, 0x33FFFFFF);
-			mlx_pixel_put(window.mlx, window.win, i, j + 1, 0x55FFFFFF);
-			mlx_pixel_put(window.mlx, window.win, i, j + 2, 0x88FFFFFF);
-			mlx_pixel_put(window.mlx, window.win, i, j + 3, 0xAAFFFFFF);
-			i++;
-		}
-	}
+    return (int)(x + 0.5);
 }
-
-int	main(void)
+float	fpart(float x)
 {
-	t_window	window;
-	t_point		point_a;
-	t_point		point_b;
-	t_point		point_c;
-	t_point		point_d;
-
-	window.mlx = mlx_init();
-	window.win = mlx_new_window(window.mlx, 500, 500, "Test");
-	point_a.x = 10;
-	point_a.y = 20;
-	point_b.x = 20;
-	point_b.y = 20;
-	point_c.x = 30;
-	point_c.y = 20;
-	point_d.x = 31;
-	point_d.y = 10;
-	put_line(window, point_a, point_b, 0xF0FFFFFF);
-	put_line(window, point_b, point_c, 0xE0FFFFFF);
-	put_line(window, point_d, point_c, 0xA0FFFFFF);
-	mlx_loop(window.mlx);
+    return x - floor(x);
+}
+float	rfpart(float x)
+{
+    return 1.0 - fpart(x);
+}
+int	ipart(float x)
+{
+    return (int)x;
+}
+void draw_pixel(int x, int y, float brightness, void *mlx_ptr, void *win_ptr) {
+    int color = (int)(brightness * 255); // Parlaklığı renk değerine dönüştür
+    int pixel_color = (color << 16) | (color << 8) | color; // RGB formatına dönüştür
+    mlx_pixel_put(mlx_ptr, win_ptr, x, y, pixel_color);
+}
+void draw_line(int x0, int y0, int x1, int y1, void *mlx_ptr, void *win_ptr) {
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int is_steep = dy > dx;
+    if (is_steep) {
+        // Swap x0 with y0 and x1 with y1
+        int temp = x0;
+        x0 = y0;
+        y0 = temp;
+        temp = x1;
+        x1 = y1;
+        y1 = temp;
+    }
+    if (x0 > x1) {
+        // Swap x0 with x1 and y0 with y1
+        int temp = x0;
+        x0 = x1;
+        x1 = temp;
+        temp = y0;
+        y0 = y1;
+        y1 = temp;
+    }
+    dx = x1 - x0;
+    dy = y1 - y0;
+    float gradient = (float)dy / dx;
+    // First endpoint
+    float x_end = round(x0);
+    float y_end = y0 + gradient * (x_end - x0);
+    float x_gap = rfpart(x0 + 0.5);
+    int x_pixel1 = (int)x_end;
+    int y_pixel1 = (int)y_end;
+    if (is_steep) {
+        draw_pixel(y_pixel1, x_pixel1, rfpart(y_end) * x_gap, mlx_ptr, win_ptr);
+        draw_pixel(y_pixel1 + 1, x_pixel1, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
+    } else {
+        draw_pixel(x_pixel1, y_pixel1, rfpart(y_end) * x_gap, mlx_ptr, win_ptr);
+        draw_pixel(x_pixel1, y_pixel1 + 1, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
+    }
+    float intery = y_end + gradient; // First y-intersection for the main loop
+    // Second endpoint
+    x_end = round(x1);
+    y_end = y1 + gradient * (x_end - x1);
+    x_gap = fpart(x1 + 0.5);
+    int x_pixel2 = (int)x_end;
+    int y_pixel2 = (int)y_end;
+    if (is_steep) {
+        draw_pixel(y_pixel2, x_pixel2, rfpart(y_end) * x_gap, mlx_ptr, win_ptr);
+        draw_pixel(y_pixel2 + 1, x_pixel2, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
+    } else {
+        draw_pixel(x_pixel2, y_pixel2, rfpart(y_end) * x_gap, mlx_ptr, win_ptr);
+        draw_pixel(x_pixel2, y_pixel2 + 1, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
+    }
+    // Main loop
+    if (is_steep) {
+        for (int x = x_pixel1 + 1; x <= x_pixel2 - 1; x++) {
+            draw_pixel(ipart(intery), x, rfpart(intery), mlx_ptr, win_ptr);
+            draw_pixel(ipart(intery) + 1, x, fpart(intery), mlx_ptr, win_ptr);
+            intery += gradient;
+        }
+    } else {
+        for (int x = x_pixel1 + 1; x <= x_pixel2 - 1; x++) {
+            draw_pixel(x, ipart(intery), rfpart(intery), mlx_ptr, win_ptr);
+            draw_pixel(x, ipart(intery) + 1, fpart(intery), mlx_ptr, win_ptr);
+            intery += gradient;
+        }
+    }
+}
+int main() {
+    void *mlx_ptr = mlx_init();
+    void *win_ptr = mlx_new_window(mlx_ptr, WIDTH, HEIGHT, "Wu Line Drawing Example");
+    draw_line(100, 100, 200, 500, mlx_ptr, win_ptr);
+    draw_line(200, 700, 700, 0, mlx_ptr, win_ptr);
+    mlx_loop(mlx_ptr);
+    return 0;
 }
