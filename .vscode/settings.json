@@ -8,6 +8,7 @@
 		"locale": "c",
 		"unistd.h": "c",
 		"cstdlib": "c",
-		"stdlib.h": "c"
+		"stdlib.h": "c",
+		"math.h": "c"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 20:12:30 by vparlak           #+#    #+#             */
-/*   Updated: 2023/08/16 20:22:21 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/08/18 19:17:05 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,10 @@ void draw_line(int x0, int y0, int x1, int y1, void *mlx_ptr, void *win_ptr) {
         draw_pixel(y_pixel1, x_pixel1, y_gap * x_gap, mlx_ptr, win_ptr);
         draw_pixel(y_pixel1 + 1, x_pixel1, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
     } else {
-        draw_pixel(x_pixel1, y_pixel1, y_gap * x_gap, mlx_ptr, win_ptr);
-        draw_pixel(x_pixel1, y_pixel1 + 1, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
+        if (y_gap * x_gap != 0)
+            draw_pixel(x_pixel1, y_pixel1, y_gap * x_gap, mlx_ptr, win_ptr);
+        if (fpart(y_end) * x_gap != 0)
+            draw_pixel(x_pixel1, y_pixel1 + 1, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
     }
     float intery = y_end + gradient; // First y-intersection for the main loop
     // Second endpoint
@@ -90,8 +92,10 @@ void draw_line(int x0, int y0, int x1, int y1, void *mlx_ptr, void *win_ptr) {
         draw_pixel(y_pixel2, x_pixel2, y_gap * x_gap, mlx_ptr, win_ptr);
         draw_pixel(y_pixel2 + 1, x_pixel2, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
     } else {
-        draw_pixel(x_pixel2, y_pixel2, y_gap * x_gap, mlx_ptr, win_ptr);
-        draw_pixel(x_pixel2, y_pixel2 + 1, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
+        if (y_gap * x_gap != 0)
+            draw_pixel(x_pixel2, y_pixel2, y_gap * x_gap, mlx_ptr, win_ptr);
+        if (fpart(y_end) * x_gap != 0)
+            draw_pixel(x_pixel2, y_pixel2 + 1, fpart(y_end) * x_gap, mlx_ptr, win_ptr);
     }
     // Main loop
     if (is_steep) {
@@ -102,8 +106,10 @@ void draw_line(int x0, int y0, int x1, int y1, void *mlx_ptr, void *win_ptr) {
         }
     } else {
         for (int x = x_pixel1 + 1; x <= x_pixel2 - 1; x++) {
-            draw_pixel(x, ipart(intery), rfpart(intery), mlx_ptr, win_ptr);
-            draw_pixel(x, ipart(intery) + 1, fpart(intery), mlx_ptr, win_ptr);
+            if (rfpart(intery) != 0)
+                draw_pixel(x, ipart(intery), rfpart(intery), mlx_ptr, win_ptr);
+            if (fpart(intery) != 0)
+                draw_pixel(x, ipart(intery) + 1, fpart(intery), mlx_ptr, win_ptr);
             intery += gradient;
         }
     }
@@ -111,8 +117,7 @@ void draw_line(int x0, int y0, int x1, int y1, void *mlx_ptr, void *win_ptr) {
 int main() {
     void *mlx_ptr = mlx_init();
     void *win_ptr = mlx_new_window(mlx_ptr, WIDTH, HEIGHT, "Wu Line Drawing Example");
-    draw_line(0, 0, 10, 5, mlx_ptr, win_ptr);
-    draw_line(200, 700, 700, 0, mlx_ptr, win_ptr);
+    draw_line(0, 0, 900, 500, mlx_ptr, win_ptr);
     mlx_loop(mlx_ptr);
     return 0;
 }
