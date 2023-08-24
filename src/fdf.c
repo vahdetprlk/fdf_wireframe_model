@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/08/23 20:40:04 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/08/24 20:48:28 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,31 +85,24 @@ void	draw_loop(t_point point_1, t_point point_2, int is_steep, t_mlx m)
 
 	gradient = (float)(point_2.y - point_1.y) / (point_2.x - point_1.x);
 	intery = point_1.y + gradient;
-	if (is_steep)
+	x = point_1.x;
+	while (x <= point_2.x - 1 && x++)
 	{
-		x = point_1.x + 1;
-		while (x <= point_2.x - 1)
+		if (is_steep)
 		{
 			if (rfpart(intery) != 0)
 				draw_pixel(ipart(intery), x, rfpart(intery), m);
 			if (fpart(intery) != 0)
 				draw_pixel(ipart(intery) + 1, x, fpart(intery), m);
-			intery += gradient;
-			x++;
 		}
-	}
-	else
-	{
-		x = point_1.x + 1;
-		while (x <= point_2.x - 1)
+		else
 		{
 			if (rfpart(intery) != 0)
 				draw_pixel(x, ipart(intery), rfpart(intery), m);
 			if (fpart(intery) != 0)
 				draw_pixel(x, ipart(intery) + 1, fpart(intery), m);
-			intery += gradient;
-			x++;
 		}
+		intery += gradient;
 	}
 }
 
@@ -131,25 +124,38 @@ void draw_line(t_point point_1, t_point point_2, t_mlx mlx_n)
 	draw_loop(point_1, point_2, is_steep, mlx_n);
 }
 
-int main()
+void	ft_bzero(void *s, int n)
 {
-	t_mlx	mlx;
-	t_point	point_1;
-	t_point	point_2;
+	int	i;
+	char	*ptr;
 
-	mlx.mlx = mlx_init();
-	mlx.win = mlx_new_window(mlx.mlx, WIDTH, HEIGHT, "Wu Line Drawing Example");
-	point_1.x = 200;
-	point_1.y = 2000;
-	point_2.x = 1000;
-	point_2.y = 250;
+	i = 0;
+	ptr = s;
+	while (i < n)
+		ptr[i++] = '\0';
+}
 
+int main(void)
+{
+    void *mlx_ptr;
+    void *win_ptr;
+	void *img_ptr;
+	char *data_addr;
+	int bpp;
+	int size_line;
+	int endian;
 
-	draw_line(point_1, point_2, mlx);
+    mlx_ptr = mlx_init();
+    win_ptr = mlx_new_window(mlx_ptr, 800, 800, "My Window");
+	img_ptr = mlx_new_image(mlx_ptr, 30, 30);
+	data_addr = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
+	ft_bzero(data_addr, 800 * 800 * (bpp / 8));
+	int		i;
+		i = (1) + (1);
+		data_addr[i] = 0xFF;
+		data_addr[++i] = 0xFF >> 8;
+		data_addr[++i] = 0xFF >> 16;
+	mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 50, 50);
 
-
-
-
-	mlx_loop(mlx.mlx);
-	return (0);
+	mlx_loop(mlx_ptr);
 }
