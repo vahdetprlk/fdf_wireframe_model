@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/08/25 17:40:17 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/08/25 22:45:06 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,12 @@ int	ipart(float x)
 void	draw_pixel_smooth(int x, int y, float brightness, t_vars *vars)
 {
 	int	offset;
-	int	color;
 
-	color = brightness * 0xFF;
-    offset = y * *(vars->size_line) + x * (*(vars->bpp) / 8);
-	vars->data_addr[offset] = color;
-    vars->data_addr[offset + 1] = color;
-    vars->data_addr[offset + 2] = color;
+	offset = y * *(vars->size_line) + x * (*(vars->bpp) / 8);
+	vars->data_addr[offset] = 0x00 ;
+	vars->data_addr[offset + 1] = 0x7F;
+	vars->data_addr[offset + 2] = 0xFF;
+	vars->data_addr[offset + 3] = 0xFF * (1 - brightness);
 }
 
 int	swap_origins(t_point *point_1, t_point *point_2)
@@ -79,31 +78,36 @@ int	swap_origins(t_point *point_1, t_point *point_2)
 	return (is_steep);
 }
 
-void	draw_loop_smooth(t_point point_1, t_point point_2, int is_steep, t_vars *vars)
+void	draw_loop(int is_steep, float intery, int x, t_vars *vars)
+{
+	if (is_steep)
+	{
+		if (rfpart(intery) != 0)
+			draw_pixel_smooth(ipart(intery), x, rfpart(intery), vars);
+		if (fpart(intery) != 0)
+			draw_pixel_smooth(ipart(intery) + 1, x, fpart(intery), vars);
+	}
+	else
+	{
+		if (rfpart(intery) != 0)
+			draw_pixel_smooth(x, ipart(intery), rfpart(intery), vars);
+		if (fpart(intery) != 0)
+			draw_pixel_smooth(x, ipart(intery) + 1, fpart(intery), vars);
+	}
+}
+
+void	draw_loop_smooth(t_point p1, t_point p2, int is_steep, t_vars *vars)
 {
 	int		x;
 	float	gradient;
 	float	intery;
 
-	gradient = (float)(point_2.y - point_1.y) / (point_2.x - point_1.x);
-	intery = point_1.y + gradient;
-	x = point_1.x + 1;
-	while (x <= point_2.x)
+	gradient = (float)(p2.y - p1.y) / (p2.x - p1.x);
+	intery = p1.y + gradient;
+	x = p1.x + 1;
+	while (x <= p2.x)
 	{
-		if (is_steep)
-		{
-			if (rfpart(intery) != 0)
-				draw_pixel_smooth(ipart(intery), x, rfpart(intery), vars);
-			if (fpart(intery) != 0)
-				draw_pixel_smooth(ipart(intery) + 1, x, fpart(intery), vars);
-		}
-		else
-		{
-			if (rfpart(intery) != 0)
-				draw_pixel_smooth(x, ipart(intery), rfpart(intery), vars);
-			if (fpart(intery) != 0)
-				draw_pixel_smooth(x, ipart(intery) + 1, fpart(intery), vars);
-		}
+		draw_loop(is_steep, intery, x, vars);
 		intery += gradient;
 		x++;
 	}
@@ -140,11 +144,15 @@ void	ft_bzero(void *s, int n)
 
 int main()
 {
+
 	t_vars vars;
 	t_point point_1;
 	t_point point_2;
 	t_point point_3;
 	t_point point_4;
+	t_point point_5;
+	t_point point_6;
+
 	int bpp;
 	int size_line;
 	int endian;
@@ -156,16 +164,21 @@ int main()
 	vars.bpp = &bpp;
 	vars.size_line = &size_line;
 	vars.endian = &endian;
-	point_1.x = 1;
-	point_1.y = 10;
-	point_2.x = 100;
-	point_2.y = 100;
-	point_3.x = 100;
+	point_1.x = 0;
+	point_1.y = 0;
+	point_2.x = 300;
+	point_2.y = 799;
+	point_3.x = 0;
 	point_3.y = 50;
 	point_4.x = 150;
 	point_4.y = 200;
+	point_5.x = 500;
+	point_5.y = 500;
+	point_6.x = 500;
+	point_6.y = 500;
 	draw_line_smooth(point_1, point_2, &vars);
 	draw_line_smooth(point_3, point_4, &vars);
+	draw_line_smooth(point_5, point_6, &vars);
 	mlx_put_image_to_window(vars.m.mlx, vars.m.win, vars.img_ptr, 0, 0);
     mlx_loop(vars.m.mlx);
     return 0;
