@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/08/24 20:48:28 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/08/25 17:40:17 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,16 @@ int	ipart(float x)
 	return ((int)x);
 }
 
-void	draw_pixel(int x, int y, float brightness, t_mlx m)
+void	draw_pixel_smooth(int x, int y, float brightness, t_vars *vars)
 {
+	int	offset;
 	int	color;
-	int	pixel_color;
 
-	color = (int)(brightness * 0xFF);
-	pixel_color = (color << 16) | (color << 8) | color;
-	mlx_pixel_put(m.mlx, m.win, x, y, pixel_color);
+	color = brightness * 0xFF;
+    offset = y * *(vars->size_line) + x * (*(vars->bpp) / 8);
+	vars->data_addr[offset] = color;
+    vars->data_addr[offset + 1] = color;
+    vars->data_addr[offset + 2] = color;
 }
 
 int	swap_origins(t_point *point_1, t_point *point_2)
@@ -77,7 +79,7 @@ int	swap_origins(t_point *point_1, t_point *point_2)
 	return (is_steep);
 }
 
-void	draw_loop(t_point point_1, t_point point_2, int is_steep, t_mlx m)
+void	draw_loop_smooth(t_point point_1, t_point point_2, int is_steep, t_vars *vars)
 {
 	int		x;
 	float	gradient;
@@ -85,28 +87,29 @@ void	draw_loop(t_point point_1, t_point point_2, int is_steep, t_mlx m)
 
 	gradient = (float)(point_2.y - point_1.y) / (point_2.x - point_1.x);
 	intery = point_1.y + gradient;
-	x = point_1.x;
-	while (x <= point_2.x - 1 && x++)
+	x = point_1.x + 1;
+	while (x <= point_2.x)
 	{
 		if (is_steep)
 		{
 			if (rfpart(intery) != 0)
-				draw_pixel(ipart(intery), x, rfpart(intery), m);
+				draw_pixel_smooth(ipart(intery), x, rfpart(intery), vars);
 			if (fpart(intery) != 0)
-				draw_pixel(ipart(intery) + 1, x, fpart(intery), m);
+				draw_pixel_smooth(ipart(intery) + 1, x, fpart(intery), vars);
 		}
 		else
 		{
 			if (rfpart(intery) != 0)
-				draw_pixel(x, ipart(intery), rfpart(intery), m);
+				draw_pixel_smooth(x, ipart(intery), rfpart(intery), vars);
 			if (fpart(intery) != 0)
-				draw_pixel(x, ipart(intery) + 1, fpart(intery), m);
+				draw_pixel_smooth(x, ipart(intery) + 1, fpart(intery), vars);
 		}
 		intery += gradient;
+		x++;
 	}
 }
 
-void draw_line(t_point point_1, t_point point_2, t_mlx mlx_n)
+void draw_line_smooth(t_point point_1, t_point point_2, t_vars *vars)
 {
 	int		is_steep;
 
@@ -114,14 +117,14 @@ void draw_line(t_point point_1, t_point point_2, t_mlx mlx_n)
 	point_1.brightness = 1;
 	point_2.brightness = 1;
 	if (is_steep)
-		draw_pixel(point_1.y, point_1.x, 1, mlx_n);
+		draw_pixel_smooth(point_1.y, point_1.x, 1, vars);
 	else
-		draw_pixel(point_1.x, point_1.y, 1, mlx_n);
+		draw_pixel_smooth(point_1.x, point_1.y, 1, vars);
 	if (is_steep)
-		draw_pixel(point_2.y, point_2.x, 1, mlx_n);
+		draw_pixel_smooth(point_2.y, point_2.x, 1, vars);
 	else
-		draw_pixel(point_2.x, point_2.y, 1, mlx_n);
-	draw_loop(point_1, point_2, is_steep, mlx_n);
+		draw_pixel_smooth(point_2.x, point_2.y, 1, vars);
+	draw_loop_smooth(point_1, point_2, is_steep, vars);
 }
 
 void	ft_bzero(void *s, int n)
@@ -135,27 +138,36 @@ void	ft_bzero(void *s, int n)
 		ptr[i++] = '\0';
 }
 
-int main(void)
+int main()
 {
-    void *mlx_ptr;
-    void *win_ptr;
-	void *img_ptr;
-	char *data_addr;
+	t_vars vars;
+	t_point point_1;
+	t_point point_2;
+	t_point point_3;
+	t_point point_4;
 	int bpp;
 	int size_line;
 	int endian;
 
-    mlx_ptr = mlx_init();
-    win_ptr = mlx_new_window(mlx_ptr, 800, 800, "My Window");
-	img_ptr = mlx_new_image(mlx_ptr, 30, 30);
-	data_addr = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
-	ft_bzero(data_addr, 800 * 800 * (bpp / 8));
-	int		i;
-		i = (1) + (1);
-		data_addr[i] = 0xFF;
-		data_addr[++i] = 0xFF >> 8;
-		data_addr[++i] = 0xFF >> 16;
-	mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 50, 50);
-
-	mlx_loop(mlx_ptr);
+    vars.m.mlx = mlx_init();
+    vars.m.win = mlx_new_window(vars.m.mlx, 800, 800, "My Window");
+    vars.img_ptr = mlx_new_image(vars.m.mlx, 800, 800);
+	vars.data_addr = mlx_get_data_addr(vars.img_ptr, &bpp, &size_line, &endian);
+	vars.bpp = &bpp;
+	vars.size_line = &size_line;
+	vars.endian = &endian;
+	point_1.x = 1;
+	point_1.y = 10;
+	point_2.x = 100;
+	point_2.y = 100;
+	point_3.x = 100;
+	point_3.y = 50;
+	point_4.x = 150;
+	point_4.y = 200;
+	draw_line_smooth(point_1, point_2, &vars);
+	draw_line_smooth(point_3, point_4, &vars);
+	mlx_put_image_to_window(vars.m.mlx, vars.m.win, vars.img_ptr, 0, 0);
+    mlx_loop(vars.m.mlx);
+    return 0;
 }
+
