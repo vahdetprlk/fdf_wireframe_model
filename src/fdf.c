@@ -6,13 +6,16 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/08/25 22:45:06 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/08/26 19:25:38 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "mlx.h"
+#include <stdlib.h>
 #include <math.h>
+
+#include <stdio.h>
 
 #define WIDTH 1920
 #define HEIGHT 1080
@@ -44,10 +47,10 @@ void	draw_pixel_smooth(int x, int y, float brightness, t_vars *vars)
 	int	offset;
 
 	offset = y * *(vars->size_line) + x * (*(vars->bpp) / 8);
-	vars->data_addr[offset] = 0x00 ;
-	vars->data_addr[offset + 1] = 0x7F;
-	vars->data_addr[offset + 2] = 0xFF;
-	vars->data_addr[offset + 3] = 0xFF * (1 - brightness);
+	vars->data_addr[offset] = 0x00 * brightness;
+	vars->data_addr[offset + 1] = 0x7F * brightness;
+	vars->data_addr[offset + 2] = 0xFF * brightness;
+	//vars->data_addr[offset + 3] = 0xFF * (1 - brightness);~
 }
 
 int	swap_origins(t_point *point_1, t_point *point_2)
@@ -131,20 +134,19 @@ void draw_line_smooth(t_point point_1, t_point point_2, t_vars *vars)
 	draw_loop_smooth(point_1, point_2, is_steep, vars);
 }
 
-void	ft_bzero(void *s, int n)
+void	safe_exit(int status)
 {
-	int	i;
-	char	*ptr;
+	exit(status);
+}
 
-	i = 0;
-	ptr = s;
-	while (i < n)
-		ptr[i++] = '\0';
+void test()
+{
+  char* pTmp = (char*)malloc(sizeof(char)*1);
+  (void) pTmp;
 }
 
 int main()
 {
-
 	t_vars vars;
 	t_point point_1;
 	t_point point_2;
@@ -158,9 +160,17 @@ int main()
 	int endian;
 
     vars.m.mlx = mlx_init();
+	if (!vars.m.mlx)
+		safe_exit(EXIT_FAILURE);
     vars.m.win = mlx_new_window(vars.m.mlx, 800, 800, "My Window");
+	if (!vars.m.win)
+		safe_exit(EXIT_FAILURE);
     vars.img_ptr = mlx_new_image(vars.m.mlx, 800, 800);
+	if (!vars.img_ptr)
+		safe_exit(EXIT_FAILURE);
 	vars.data_addr = mlx_get_data_addr(vars.img_ptr, &bpp, &size_line, &endian);
+	if (!vars.data_addr)
+		safe_exit(EXIT_FAILURE);
 	vars.bpp = &bpp;
 	vars.size_line = &size_line;
 	vars.endian = &endian;
