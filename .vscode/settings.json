@@ -10,6 +10,7 @@
 		"cstdlib": "c",
 		"stdlib.h": "c",
 		"math.h": "c",
-		"chrono": "c"
+		"chrono": "c",
+		"mlx.h": "c"
 	}
 }
