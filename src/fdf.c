@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/08/28 19:04:34 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/08/31 18:31:30 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "safeAlloc.h"
 
 int	ft_abs(int x)
 {
@@ -195,12 +196,12 @@ void	ft_draw(t_vars *vars)
 	t_point p3;
 	t_point p4;
 	t_point p5;
-	//int origin[2] = { round(200.000000), round(90.000000) };
+
 
 	// ft_draw_polygon(4, 150, (int [2]){400, 300}, vars);
 	// ft_draw_polygon(50, 100, (int [2]){500, 90}, vars);
 	// ft_draw_polygon(50, 100, (int [2]){280, 90}, vars);
-	// ft_draw_polygon(50, 120, (int [2]){600, 180}, vars);
+	ft_draw_polygon(900, 180, (int [2]){600, 180}, vars);
 	// ft_draw_polygon(25, 130, (int [2]){100, 270}, vars);
 	// ft_draw_polygon(25, 140, (int [2]){200, 560}, vars);
 	// ft_draw_polygon(10, 100, (int [2]){200, 650}, vars);
@@ -239,5 +240,4 @@ int	main()
 	ft_draw(vars);
 	ft_hooks(&vars);
 	mlx_loop(vars->m.mlx);
-	return (0);
 }

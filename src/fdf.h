@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/08/28 14:34:51 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/08/31 16:12:38 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_point
 	float	brightness;
 }	t_point;
 
-typedef struct s_vars
+typedef struct s_vars // bu struct'a özel free fonksiyonu yaz içindekileri freelemek için veya her defasında freele.
 {
 	t_mlx	m;
 	char	*data_addr;
