@@ -13,6 +13,7 @@
 		"chrono": "c",
 		"mlx.h": "c",
 		"safealloc.h": "c",
-		"wait.h": "c"
+		"wait.h": "c",
+		"fcntl.h": "c"
 	}
 }

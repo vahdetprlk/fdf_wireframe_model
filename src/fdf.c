@@ -6,16 +6,137 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/08/31 18:31:30 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/10 18:50:38 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "mlx.h"
 #include <stdlib.h>
-#include <time.h>
 #include <math.h>
-#include "safeAlloc.h"
+#include <fcntl.h>
+#include "get_next_line.h"
+#include "ft_printf.h"
+#include <string.h>
+
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	const char	*s;
+	char		*d;
+
+	d = (char *)dst;
+	s = (const char *)src;
+	if (!d && !s)
+		return (NULL);
+	while (n--)
+		*d++ = *s++;
+	return (dst);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	len_src;
+	size_t	len;
+
+	len_src = ft_strlen(src);
+	if (dstsize)
+	{
+		if (len_src >= dstsize)
+			len = dstsize - 1;
+		else
+			len = len_src;
+		ft_memcpy(dst, src, len);
+		dst[len] = '\0';
+	}
+	return (len_src);
+}
+
+static char	**ft_malloc_error(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+	return (NULL);
+}
+
+static size_t	ft_nb_words(char const *s, char c)
+{
+	size_t	i;
+	size_t	nb_words;
+
+	if (!s[0])
+		return (0);
+	i = 0;
+	nb_words = 0;
+	while (s[i] && s[i] == c)
+		i++;
+	while (s[i])
+	{
+		if (s[i] == c)
+		{
+			nb_words++;
+			while (s[i] && s[i] == c)
+				i++;
+			continue ;
+		}
+		i++;
+	}
+	if (s[i - 1] != c)
+		nb_words++;
+	return (nb_words);
+}
+
+static void	ft_get_next_word(char **next_word, size_t *next_word_len, char c)
+{
+	size_t	i;
+
+	*next_word += *next_word_len;
+	*next_word_len = 0;
+	i = 0;
+	while (**next_word && **next_word == c)
+		(*next_word)++;
+	while ((*next_word)[i])
+	{
+		if ((*next_word)[i] == c)
+			return ;
+		(*next_word_len)++;
+		i++;
+	}
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**tab;
+	char	*next_word;
+	size_t	next_word_len;
+	size_t	i;
+
+	if (!s)
+		return (NULL);
+	tab = (char **)malloc(sizeof(char *) * (ft_nb_words(s, c) + 1));
+	if (!tab)
+		return (NULL);
+	i = 0;
+	next_word = (char *)s;
+	next_word_len = 0;
+	while (i < ft_nb_words(s, c))
+	{
+		ft_get_next_word(&next_word, &next_word_len, c);
+		tab[i] = (char *)malloc(sizeof(char) * (next_word_len + 1));
+		if (!tab[i])
+			return (ft_malloc_error(tab));
+		ft_strlcpy(tab[i], next_word, next_word_len + 1);
+		i++;
+	}
+	tab[i] = NULL;
+	return (tab);
+}
 
 int	ft_abs(int x)
 {
@@ -130,16 +251,22 @@ void ft_draw_line(t_point point_1, t_point point_2, t_vars *vars)
 	ft_draw_loop(point_1, point_2, is_steep, vars);
 }
 
-int	ft_close_x(void)
+int	ft_close_x(t_vars *vars)
 {
+	mlx_destroy_image(vars->m.mlx, vars->img_ptr);
+	mlx_destroy_window(vars->m.mlx, vars->m.win);
 	exit(0);
 	return (1);
 }
 
-int	ft_close(int keycode)
+int	ft_close(int keycode, t_vars *vars)
 {
 	if (keycode == 53)
+	{
+		mlx_destroy_image(vars->m.mlx, vars->img_ptr);
+		mlx_destroy_window(vars->m.mlx, vars->m.win);
 		exit(0);
+	}
 	return (1);
 }
 
@@ -148,96 +275,117 @@ void ft_vars_init(t_vars	*vars)
 	vars->m.mlx = mlx_init();
 	if (!vars->m.mlx)
 		exit(EXIT_FAILURE);
-	vars->m.win = mlx_new_window(vars->m.mlx, 1600, 1600, "My Window");
+	vars->m.win = mlx_new_window(vars->m.mlx, 900, 900, "My Window");
 	if (!vars->m.win)
 		exit(EXIT_FAILURE);
-	vars->img_ptr = mlx_new_image(vars->m.mlx, 1600, 1600);
+	vars->img_ptr = mlx_new_image(vars->m.mlx, 900, 900);
 	if (!vars->img_ptr)
+	{
+		mlx_destroy_window(vars->m.mlx, vars->m.win);
 		exit(EXIT_FAILURE);
+	}
 	vars->data_addr = mlx_get_data_addr(vars->img_ptr,
 			&vars->bpp, &vars->size_line, &vars->endian);
 	if (!vars->data_addr)
+	{
+		mlx_destroy_image(vars->m.mlx, vars->img_ptr);
+		mlx_destroy_window(vars->m.mlx, vars->m.win);
 		exit(EXIT_FAILURE);
-}
-
-void	ft_draw_polygon(int sides, double radius, int origin[], t_vars *vars)
-{
-	double angle = 360.0 / sides;
-	t_point points[sides];
-
-	for (int i = 0; i < sides; i++) {
-		double x = origin[0] + radius * cos(i * angle * M_PI / 180.0);
-		double y = origin[1] + radius * sin(i * angle * M_PI / 180.0);
-		points[i].x = round(x);
-		points[i].y = round(y);
-	}
-
-	for (int i = 0; i < sides; i++) {
-		ft_draw_line(points[i], points[(i + 1) % sides], vars);
-	}
-}
-
-void	ft_draw_random_polygons(int num_polygons, t_vars *vars)
-{
-	srand(time(NULL)); // Rastgele sayılar için tohumu ayarla
-
-	for (int i = 0; i < num_polygons; i++) {
-		int sides = rand() % 10 + 3; // Kenar sayısı 3 ile 12 arasında rastgele
-		double radius = rand() % 70 + 30; // Yarıçap 30 ile 100 arasında rastgele
-		int origin[2] = { rand() % 1600, rand() % 800 }; // Rastgele orijin koordinatları
-		ft_draw_polygon(sides, radius, origin, vars);
 	}
 }
 
 void	ft_draw(t_vars *vars)
 {
-	t_point p1;
-	t_point p2;
-	t_point p3;
-	t_point p4;
-	t_point p5;
+	t_point point_1;
+	t_point point_2;
 
-
-	// ft_draw_polygon(4, 150, (int [2]){400, 300}, vars);
-	// ft_draw_polygon(50, 100, (int [2]){500, 90}, vars);
-	// ft_draw_polygon(50, 100, (int [2]){280, 90}, vars);
-	ft_draw_polygon(900, 180, (int [2]){600, 180}, vars);
-	// ft_draw_polygon(25, 130, (int [2]){100, 270}, vars);
-	// ft_draw_polygon(25, 140, (int [2]){200, 560}, vars);
-	// ft_draw_polygon(10, 100, (int [2]){200, 650}, vars);
-
-
-	p1.x = 400;
-	p1.y = 400;
-	p2.x = 800;
-	p2.y = 400;
-	p3.x = 800;
-	p3.y = 800;
-	p4.x = 400;
-	p4.y = 800;
-	p5.x = p3.x * 1.30;
-	p5.y = p3.y / 1.90;
-	ft_draw_line(p1, p2, vars);
-	ft_draw_line(p2, p3, vars);
-	ft_draw_line(p3, p4, vars);
-	ft_draw_line(p4, p1, vars);
-	ft_draw_line(p3, p5, vars);
-	mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
+	point_1.x = 20;
+	point_1.y = 10;
+	point_2.x = 300;
+	point_2.y = 450;
+	ft_draw_line(point_1, point_2, vars);
 }
 
-void	ft_hooks(t_vars **vars)
+void	ft_hooks(t_vars *vars)
 {
-	mlx_hook((*vars)->m.win, 2, 1L << 2, ft_close, vars);
-	mlx_hook((*vars)->m.win, 17, 1L << 17, ft_close_x, vars);
+	mlx_hook(vars->m.win, 2, 1L << 2, ft_close, vars);
+	mlx_hook(vars->m.win, 17, 1L << 17, ft_close_x, vars);
 }
 
-int	main()
+void	ft_str_to_points(char **points_str, int line_index)
+{
+	//burada points
+	(void)points_str;
+	(void)line_index;
+}
+
+
+void	ft_free_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
+void	ft_read_map(char **argv)
+{
+	int		fd;
+	int 	i;
+	char	*line;
+	char	**points_str;
+
+	fd = open(argv[1], O_RDONLY);
+	if (fd < 0)
+	{
+		ft_printf("open error: No such file or directory\n");
+		exit(EXIT_FAILURE);
+	}
+	i = 0;
+	line = get_next_line(fd);
+	if(!line)
+		exit(EXIT_FAILURE);
+	while  (line != NULL)
+	{
+		ft_printf("%s", line);
+		points_str = ft_split(line, ' ');
+		if (!points_str)
+		{
+			ft_free_tab(points_str);
+			free(line);
+			exit(EXIT_FAILURE);
+		}
+		ft_str_to_points(points_str, i);
+		ft_free_tab(points_str);
+		free(line);
+		line = get_next_line(fd);
+		if(!line)
+			exit(EXIT_FAILURE);
+		i++;
+	}
+}
+
+int	main(int argc, char **argv)
 {
 	t_vars	*vars;
 
-	vars = &(t_vars){0};
-	ft_vars_init(vars);
-	ft_draw(vars);
-	ft_hooks(&vars);
-	mlx_loop(vars->m.mlx);
+
+	if (argc == 2)
+	{
+		ft_read_map(argv);
+		vars = &(t_vars){0};
+		ft_vars_init(vars);
+		ft_draw(vars);
+		mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
+		ft_hooks(vars);
+		mlx_loop(vars->m.mlx);
+	}
+	ft_printf("Usage: ./fdf <filename>\n");
+	return (0);
+
 }
