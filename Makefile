@@ -6,7 +6,7 @@
 #    By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/22 14:36:10 by vparlak           #+#    #+#              #
-#    Updated: 2023/08/31 18:41:10 by vparlak          ###   ########.fr        #
+#    Updated: 2023/09/11 16:33:54 by vparlak          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME = fdf
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC =   src/fdf.c
+SRC =   src/fdf.c \
+		src/ft_split.c
 
 
 OBJ =  $(SRC:.c=.o)

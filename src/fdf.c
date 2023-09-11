@@ -6,32 +6,17 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/10 18:50:38 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/11 19:13:41 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "mlx.h"
-#include <stdlib.h>
 #include <math.h>
 #include <fcntl.h>
 #include "get_next_line.h"
 #include "ft_printf.h"
-#include <string.h>
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	const char	*s;
-	char		*d;
-
-	d = (char *)dst;
-	s = (const char *)src;
-	if (!d && !s)
-		return (NULL);
-	while (n--)
-		*d++ = *s++;
-	return (dst);
-}
+#include <unistd.h>
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
@@ -49,93 +34,6 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 		dst[len] = '\0';
 	}
 	return (len_src);
-}
-
-static char	**ft_malloc_error(char **tab)
-{
-	size_t	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-	return (NULL);
-}
-
-static size_t	ft_nb_words(char const *s, char c)
-{
-	size_t	i;
-	size_t	nb_words;
-
-	if (!s[0])
-		return (0);
-	i = 0;
-	nb_words = 0;
-	while (s[i] && s[i] == c)
-		i++;
-	while (s[i])
-	{
-		if (s[i] == c)
-		{
-			nb_words++;
-			while (s[i] && s[i] == c)
-				i++;
-			continue ;
-		}
-		i++;
-	}
-	if (s[i - 1] != c)
-		nb_words++;
-	return (nb_words);
-}
-
-static void	ft_get_next_word(char **next_word, size_t *next_word_len, char c)
-{
-	size_t	i;
-
-	*next_word += *next_word_len;
-	*next_word_len = 0;
-	i = 0;
-	while (**next_word && **next_word == c)
-		(*next_word)++;
-	while ((*next_word)[i])
-	{
-		if ((*next_word)[i] == c)
-			return ;
-		(*next_word_len)++;
-		i++;
-	}
-}
-
-char	**ft_split(char const *s, char c)
-{
-	char	**tab;
-	char	*next_word;
-	size_t	next_word_len;
-	size_t	i;
-
-	if (!s)
-		return (NULL);
-	tab = (char **)malloc(sizeof(char *) * (ft_nb_words(s, c) + 1));
-	if (!tab)
-		return (NULL);
-	i = 0;
-	next_word = (char *)s;
-	next_word_len = 0;
-	while (i < ft_nb_words(s, c))
-	{
-		ft_get_next_word(&next_word, &next_word_len, c);
-		tab[i] = (char *)malloc(sizeof(char) * (next_word_len + 1));
-		if (!tab[i])
-			return (ft_malloc_error(tab));
-		ft_strlcpy(tab[i], next_word, next_word_len + 1);
-		i++;
-	}
-	tab[i] = NULL;
-	return (tab);
 }
 
 int	ft_abs(int x)
@@ -275,10 +173,10 @@ void ft_vars_init(t_vars	*vars)
 	vars->m.mlx = mlx_init();
 	if (!vars->m.mlx)
 		exit(EXIT_FAILURE);
-	vars->m.win = mlx_new_window(vars->m.mlx, 900, 900, "My Window");
+	vars->m.win = mlx_new_window(vars->m.mlx, WIDTH, HEIGHT, "FdF");
 	if (!vars->m.win)
 		exit(EXIT_FAILURE);
-	vars->img_ptr = mlx_new_image(vars->m.mlx, 900, 900);
+	vars->img_ptr = mlx_new_image(vars->m.mlx, WIDTH, HEIGHT);
 	if (!vars->img_ptr)
 	{
 		mlx_destroy_window(vars->m.mlx, vars->m.win);
@@ -299,10 +197,10 @@ void	ft_draw(t_vars *vars)
 	t_point point_1;
 	t_point point_2;
 
-	point_1.x = 20;
-	point_1.y = 10;
-	point_2.x = 300;
-	point_2.y = 450;
+	point_1.x = 100;
+	point_1.y = 100;
+	point_2.x = 150;
+	point_2.y = 100;
 	ft_draw_line(point_1, point_2, vars);
 }
 
@@ -320,9 +218,9 @@ void	ft_str_to_points(char **points_str, int line_index)
 }
 
 
-void	ft_free_tab(char **tab)
+char	**ft_malloc_error(char **tab)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (tab[i])
@@ -331,53 +229,104 @@ void	ft_free_tab(char **tab)
 		i++;
 	}
 	free(tab);
+	return (NULL);
 }
 
-void	ft_read_map(char **argv)
-{
-	int		fd;
-	int 	i;
-	char	*line;
-	char	**points_str;
 
-	fd = open(argv[1], O_RDONLY);
+void	ft_read_map(int axis, int ordinate, char *file)
+{
+	int	fd;
+
+	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
 		ft_printf("open error: No such file or directory\n");
 		exit(EXIT_FAILURE);
 	}
-	i = 0;
-	line = get_next_line(fd);
-	if(!line)
-		exit(EXIT_FAILURE);
-	while  (line != NULL)
+	(void)axis;
+	(void)ordinate;
+}
+
+int	ft_find_axis(char *file)
+{
+	int		axis;
+	int		fd;
+	char	*line;
+	char	**first_line;
+
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
 	{
-		ft_printf("%s", line);
-		points_str = ft_split(line, ' ');
-		if (!points_str)
-		{
-			ft_free_tab(points_str);
-			free(line);
-			exit(EXIT_FAILURE);
-		}
-		ft_str_to_points(points_str, i);
-		ft_free_tab(points_str);
+		ft_printf("open error: No such file or directory\n");
+		exit(EXIT_FAILURE);
+	}
+	line = get_next_line(fd);
+	if (!line)
+		exit(EXIT_FAILURE);
+	first_line = ft_split(line, ' ');
+	if (!first_line)
+	{
+		free(line);
+		ft_malloc_error(first_line);
+		exit(EXIT_FAILURE);
+	}
+	axis = 0;
+	while (first_line[axis] != 0)
+		axis++;
+	if (close(fd) == -1)
+		exit(EXIT_FAILURE);
+	return (axis);
+}
+
+
+int	ft_find_ordinate(char *file)
+{
+	int		ordinate;
+	int 	fd;
+	char	*line;
+
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+	{
+		ft_printf("open error: No such file or directory\n");
+		exit(EXIT_FAILURE);
+	}
+	line = get_next_line(fd);
+	if (!line)
+		exit(EXIT_FAILURE);
+	ordinate = 0;
+	while (line)
+	{
 		free(line);
 		line = get_next_line(fd);
-		if(!line)
-			exit(EXIT_FAILURE);
-		i++;
+		if (!line)
+			break;
+		ordinate++;
 	}
+	free(line);
+	if (close(fd) == -1)
+		exit(EXIT_FAILURE);
+	return (ordinate);
+}
+
+
+void	ft_check_map(char *file)
+{
+	int		axis;
+	int		ordinate;
+
+	axis = ft_find_axis(file);
+	ordinate = ft_find_ordinate(file);
+	ft_read_map(axis, ordinate, file);
 }
 
 int	main(int argc, char **argv)
 {
 	t_vars	*vars;
 
-
 	if (argc == 2)
 	{
-		ft_read_map(argv);
+		ft_check_map(argv[1]);
 		vars = &(t_vars){0};
 		ft_vars_init(vars);
 		ft_draw(vars);
