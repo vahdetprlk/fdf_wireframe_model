@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/15 01:14:24 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/15 01:44:49 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,11 @@ typedef struct s_vars
 	int		ordinate;
 }	t_vars;
 
-char		**ft_split(char const *s, char c);
-size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
-void		*ft_memcpy(void *dst, const void *src, size_t n);
-char		**ft_free_tab(char **tab);
-void		**ft_free_map(t_vars *vars);
+char	**ft_split(char const *s, char c);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+char	**ft_free_tab(char **tab);
+void	**ft_free_map(t_vars *vars);
+int		ft_atoi(const char *str);
 
 #endif

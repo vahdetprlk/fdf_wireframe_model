@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/15 01:16:16 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/15 01:50:32 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,14 +220,6 @@ void	ft_hooks(t_vars *vars)
 	mlx_hook(vars->m.win, 17, 1L << 17, ft_close_x, vars);
 }
 
-void	ft_str_to_points(char **points_str, int line_index)
-{
-	//burada points
-	(void)points_str;
-	(void)line_index;
-}
-
-
 char	**ft_free_tab(char **tab)
 {
 	int	i;
@@ -248,7 +240,7 @@ void	**ft_free_map(t_vars *vars)
 
 	i = 0;
 
-	while (i < vars->ordinate)
+	while (i < vars->axis)
 	{
 		free((vars->map)[i]);
 		i++;
@@ -256,8 +248,6 @@ void	**ft_free_map(t_vars *vars)
 	free(vars->map);
 	return (NULL);
 }
-
-
 
 void	ft_read_map(t_vars *vars, char *file)
 {
@@ -293,7 +283,7 @@ void	ft_read_map(t_vars *vars, char *file)
 		x = 0;
 		while (x < vars->axis)
 		{
-			(vars->map)[x][y] = atoi(splitted_line[x]); // ATOİ libftden include et
+			(vars->map)[x][y] = ft_atoi(splitted_line[x]);
 			x++;
 		}
 		y++;
