@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:50:31 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/14 16:24:49 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/15 01:12:10 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	**ft_split(char const *s, char c)
 		ft_get_next_word(&next_word, &next_word_len, c);
 		tab[i] = (char *)malloc(sizeof(char) * (next_word_len + 1));
 		if (!tab[i])
-			return (ft_malloc_error(tab));
+			return (ft_free_tab(tab));
 		ft_strlcpy(tab[i], next_word, next_word_len + 1);
 		i++;
 	}

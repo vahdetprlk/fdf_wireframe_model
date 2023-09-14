@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/14 19:06:29 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/15 01:16:16 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ void ft_draw_line(t_point point_1, t_point point_2, t_vars *vars)
 
 int	ft_close_x(t_vars *vars)
 {
+	ft_free_map(vars);
 	mlx_destroy_image(vars->m.mlx, vars->img_ptr);
 	mlx_destroy_window(vars->m.mlx, vars->m.win);
 	exit(0);
@@ -161,6 +162,7 @@ int	ft_close(int keycode, t_vars *vars)
 {
 	if (keycode == 53)
 	{
+		ft_free_map(vars);
 		mlx_destroy_image(vars->m.mlx, vars->img_ptr);
 		mlx_destroy_window(vars->m.mlx, vars->m.win);
 		exit(0);
@@ -172,13 +174,20 @@ void ft_vars_init(t_vars	*vars)
 {
 	vars->m.mlx = mlx_init();
 	if (!vars->m.mlx)
+	{
+		ft_free_map(vars);
 		exit(EXIT_FAILURE);
+	}
 	vars->m.win = mlx_new_window(vars->m.mlx, WIDTH, HEIGHT, "FdF");
 	if (!vars->m.win)
+	{
+		ft_free_map(vars);
 		exit(EXIT_FAILURE);
+	}
 	vars->img_ptr = mlx_new_image(vars->m.mlx, WIDTH, HEIGHT);
 	if (!vars->img_ptr)
 	{
+		ft_free_map(vars);
 		mlx_destroy_window(vars->m.mlx, vars->m.win);
 		exit(EXIT_FAILURE);
 	}
@@ -186,6 +195,7 @@ void ft_vars_init(t_vars	*vars)
 			&vars->bpp, &vars->size_line, &vars->endian);
 	if (!vars->data_addr)
 	{
+		ft_free_map(vars);
 		mlx_destroy_image(vars->m.mlx, vars->img_ptr);
 		mlx_destroy_window(vars->m.mlx, vars->m.win);
 		exit(EXIT_FAILURE);
@@ -218,9 +228,9 @@ void	ft_str_to_points(char **points_str, int line_index)
 }
 
 
-char	**ft_malloc_error(char **tab)
+char	**ft_free_tab(char **tab)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (tab[i])
@@ -232,19 +242,84 @@ char	**ft_malloc_error(char **tab)
 	return (NULL);
 }
 
-
-void	ft_read_map(int axis, int ordinate, char *file)
+void	**ft_free_map(t_vars *vars)
 {
-	int	fd;
+	int	i;
+
+	i = 0;
+
+	while (i < vars->ordinate)
+	{
+		free((vars->map)[i]);
+		i++;
+	}
+	free(vars->map);
+	return (NULL);
+}
+
+
+
+void	ft_read_map(t_vars *vars, char *file)
+{
+	int		fd;
+	char	*line;
+	char	**splitted_line;
+	int		x;
+	int		y;
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
 		ft_printf("open error: No such file or directory\n");
+		ft_free_map(vars);
 		exit(EXIT_FAILURE);
 	}
-	(void)axis;
-	(void)ordinate;
+	y = 0;
+	while (y < vars->ordinate)
+	{
+		line = get_next_line(fd);
+		if (!line)
+		{
+			ft_free_map(vars);
+			exit(EXIT_FAILURE);
+		}
+		splitted_line = ft_split(line, ' ');
+		free(line);
+		if (!splitted_line)
+		{
+			ft_free_tab(splitted_line);
+			exit(EXIT_FAILURE);
+		}
+		x = 0;
+		while (x < vars->axis)
+		{
+			(vars->map)[x][y] = atoi(splitted_line[x]); // ATOİ libftden include et
+			x++;
+		}
+		y++;
+		ft_free_tab(splitted_line);
+	}
+}
+
+void	ft_init_map(t_vars *vars, char *file)
+{
+	int	i;
+
+	vars->map = (int **)malloc(sizeof(int *) * vars->axis);
+	if (!vars->map)
+		exit(EXIT_FAILURE);
+	i = 0;
+	while (i < vars->axis)
+	{
+		vars->map[i] = malloc(sizeof(int) * vars->ordinate);
+		if (!vars->map[i])
+		{
+			ft_free_map(vars);
+			exit(EXIT_FAILURE);
+		}
+		i++;
+	}
+	ft_read_map(vars, file);
 }
 
 int	ft_find_axis(char *file, int *fd)
@@ -266,13 +341,13 @@ int	ft_find_axis(char *file, int *fd)
 	free(first_line);
 	if (!splitted_line)
 	{
-		ft_malloc_error(splitted_line);
+		ft_free_tab(splitted_line);
 		exit(EXIT_FAILURE);
 	}
 	axis = 0;
 	while (splitted_line[axis] != NULL)
 		axis++;
-	ft_malloc_error(splitted_line);
+	ft_free_tab(splitted_line);
 	return (axis);
 }
 
@@ -287,29 +362,25 @@ int	ft_find_ordinate(int fd)
 	ordinate = 2;
 	while (line)
 	{
+		free(line);
 		line = get_next_line(fd);
 		if (!line)
 			break;
-		free(line);
 		ordinate++;
 	}
+	free (line);
 	if (close(fd) == -1)
 		exit(EXIT_FAILURE);
 	return (ordinate);
 }
 
-#include <stdio.h>
-void	ft_check_map(char *file)
+void	ft_check_map(char *file, t_vars *vars)
 {
 	int	fd;
-	int	axis;
-	int	ordinate;
 
-	axis = ft_find_axis(file, &fd);
-	ordinate = ft_find_ordinate(fd);
-	getchar();
-	ft_printf("%d, %d\n", axis, ordinate);
-	ft_read_map(axis, ordinate, file);
+	vars->axis = ft_find_axis(file, &fd);
+	vars->ordinate = ft_find_ordinate(fd);
+	ft_init_map(vars, file);
 }
 
 int	main(int argc, char **argv)
@@ -318,8 +389,8 @@ int	main(int argc, char **argv)
 
 	if (argc == 2)
 	{
-		ft_check_map(argv[1]);
 		vars = &(t_vars){0};
+		ft_check_map(argv[1], vars);
 		ft_vars_init(vars);
 		ft_draw(vars);
 		mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
