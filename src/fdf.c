@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/15 01:50:32 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/15 02:36:29 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,23 +312,13 @@ void	ft_init_map(t_vars *vars, char *file)
 	ft_read_map(vars, file);
 }
 
-int	ft_find_axis(char *file, int *fd)
+int	ft_count_axis(char *line)
 {
 	int		axis;
-	char	*first_line;
 	char	**splitted_line;
 
- 	*fd = open(file, O_RDONLY);
-	if (*fd < 0)
-	{
-		ft_printf("open error: No such file or directory\n");
-		exit(EXIT_FAILURE);
-	}
-	first_line = get_next_line(*fd);
-	if (!first_line)
-		exit(EXIT_FAILURE);
-	splitted_line = ft_split(first_line, ' ');
-	free(first_line);
+
+	splitted_line = ft_split(line, ' ');
 	if (!splitted_line)
 	{
 		ft_free_tab(splitted_line);
@@ -341,7 +331,26 @@ int	ft_find_axis(char *file, int *fd)
 	return (axis);
 }
 
-int	ft_find_ordinate(int fd)
+int	ft_find_axis(char *file, int *fd)
+{
+	int		axis;
+	char	*first_line;
+
+ 	*fd = open(file, O_RDONLY);
+	if (*fd < 0)
+	{
+		ft_printf("open error: No such file or directory\n");
+		exit(EXIT_FAILURE);
+	}
+	first_line = get_next_line(*fd);
+	if (!first_line)
+		exit(EXIT_FAILURE);
+	axis = ft_count_axis(first_line);
+	free(first_line);
+	return (axis);
+}
+
+int	ft_find_ordinate(int fd, int axis)
 {
 	int		ordinate;
 	char	*line;
@@ -349,6 +358,11 @@ int	ft_find_ordinate(int fd)
 	line = get_next_line(fd);
 	if (!line)
 			exit(EXIT_FAILURE);
+	if (axis != ft_count_axis(line))
+	{
+		free(line);
+		exit(EXIT_FAILURE);
+	}
 	ordinate = 2;
 	while (line)
 	{
@@ -356,9 +370,14 @@ int	ft_find_ordinate(int fd)
 		line = get_next_line(fd);
 		if (!line)
 			break;
+		if (axis != ft_count_axis(line))
+		{
+			free(line);
+			exit(EXIT_FAILURE);
+		}
 		ordinate++;
 	}
-	free (line);
+	free(line);
 	if (close(fd) == -1)
 		exit(EXIT_FAILURE);
 	return (ordinate);
@@ -369,7 +388,7 @@ void	ft_check_map(char *file, t_vars *vars)
 	int	fd;
 
 	vars->axis = ft_find_axis(file, &fd);
-	vars->ordinate = ft_find_ordinate(fd);
+	vars->ordinate = ft_find_ordinate(fd, vars->axis);
 	ft_init_map(vars, file);
 }
 
