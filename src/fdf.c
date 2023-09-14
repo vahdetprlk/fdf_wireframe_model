@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/11 19:13:41 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/14 19:06:29 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,76 +247,68 @@ void	ft_read_map(int axis, int ordinate, char *file)
 	(void)ordinate;
 }
 
-int	ft_find_axis(char *file)
+int	ft_find_axis(char *file, int *fd)
 {
 	int		axis;
-	int		fd;
-	char	*line;
-	char	**first_line;
+	char	*first_line;
+	char	**splitted_line;
 
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
+ 	*fd = open(file, O_RDONLY);
+	if (*fd < 0)
 	{
 		ft_printf("open error: No such file or directory\n");
 		exit(EXIT_FAILURE);
 	}
-	line = get_next_line(fd);
-	if (!line)
-		exit(EXIT_FAILURE);
-	first_line = ft_split(line, ' ');
+	first_line = get_next_line(*fd);
 	if (!first_line)
+		exit(EXIT_FAILURE);
+	splitted_line = ft_split(first_line, ' ');
+	free(first_line);
+	if (!splitted_line)
 	{
-		free(line);
-		ft_malloc_error(first_line);
+		ft_malloc_error(splitted_line);
 		exit(EXIT_FAILURE);
 	}
 	axis = 0;
-	while (first_line[axis] != 0)
+	while (splitted_line[axis] != NULL)
 		axis++;
-	if (close(fd) == -1)
-		exit(EXIT_FAILURE);
+	ft_malloc_error(splitted_line);
 	return (axis);
 }
 
-
-int	ft_find_ordinate(char *file)
+int	ft_find_ordinate(int fd)
 {
 	int		ordinate;
-	int 	fd;
 	char	*line;
 
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-	{
-		ft_printf("open error: No such file or directory\n");
-		exit(EXIT_FAILURE);
-	}
 	line = get_next_line(fd);
 	if (!line)
-		exit(EXIT_FAILURE);
-	ordinate = 0;
+			exit(EXIT_FAILURE);
+	ordinate = 2;
 	while (line)
 	{
-		free(line);
 		line = get_next_line(fd);
 		if (!line)
 			break;
+		free(line);
 		ordinate++;
 	}
-	free(line);
 	if (close(fd) == -1)
 		exit(EXIT_FAILURE);
 	return (ordinate);
 }
 
-
+#include <stdio.h>
 void	ft_check_map(char *file)
 {
-	int		axis;
-	int		ordinate;
+	int	fd;
+	int	axis;
+	int	ordinate;
 
-	axis = ft_find_axis(file);
-	ordinate = ft_find_ordinate(file);
+	axis = ft_find_axis(file, &fd);
+	ordinate = ft_find_ordinate(fd);
+	getchar();
+	ft_printf("%d, %d\n", axis, ordinate);
 	ft_read_map(axis, ordinate, file);
 }
 
@@ -336,5 +328,4 @@ int	main(int argc, char **argv)
 	}
 	ft_printf("Usage: ./fdf <filename>\n");
 	return (0);
-
 }
