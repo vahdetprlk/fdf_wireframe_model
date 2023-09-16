@@ -14,6 +14,7 @@
 		"mlx.h": "c",
 		"safealloc.h": "c",
 		"wait.h": "c",
-		"fcntl.h": "c"
+		"fcntl.h": "c",
+		"errno.h": "c"
 	}
 }

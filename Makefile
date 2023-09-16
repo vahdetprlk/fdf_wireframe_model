@@ -6,7 +6,7 @@
 #    By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/22 14:36:10 by vparlak           #+#    #+#              #
-#    Updated: 2023/09/15 01:44:28 by vparlak          ###   ########.fr        #
+#    Updated: 2023/09/16 18:51:51 by vparlak          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,14 +17,11 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 SRC =   src/fdf.c \
 		src/ft_split.c \
-		src/ft_atoi.c
+		src/ft_atoi.c \
+		src/ft_atoi_hex.c
 
 
 OBJ =  $(SRC:.c=.o)
-
-PRINTF_DIR = include/ft_printf
-PRINTF = $(PRINTF_DIR)/libftprintf.a
-PRINTF_INC = -I$(PRINTF_DIR)
 
 LIBMLX_DIR = include/libmlx
 LIBMLX = $(LIBMLX_DIR)/libmlx.a
@@ -34,11 +31,8 @@ GNL_DIR = include/get_next_line
 GNL = $(GNL_DIR)/libgetnextline.a
 GNL_INC = -I$(GNL_DIR)
 
-$(NAME): $(OBJ) $(PRINTF) $(GNL) $(LIBMLX) $(SALL)
-	@$(CC) $(CFLAGS) $(OBJ) -L$(PRINTF_DIR) -L$(GNL_DIR) -L$(LIBMLX_DIR) -lftprintf -lgetnextline -lmlx -framework OpenGL -framework AppKit -o $(NAME)
-
-$(PRINTF):
-	@make -C $(PRINTF_DIR)
+$(NAME): $(OBJ) $(GNL) $(LIBMLX) $(SALL)
+	@$(CC) $(CFLAGS) $(OBJ) -L$(GNL_DIR) -L$(LIBMLX_DIR) -lgetnextline -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 $(GNL):
 	@make -C $(GNL_DIR)
@@ -47,19 +41,17 @@ $(LIBMLX):
 	@make -C $(LIBMLX_DIR)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(PRINTF_INC) $(GNL_INC) $(LIBMLX_INC) -c $< -o $@
+	$(CC) $(CFLAGS) $(GNL_INC) $(LIBMLX_INC) -c $< -o $@
 
 all: $(NAME)
 
 clean:
-	@make -C $(PRINTF_DIR) clean
 	@make -C $(LIBMLX_DIR) clean
 	@make -C $(GNL_DIR) clean
 	@rm -f $(OBJ)
 
 
 fclean: clean
-	@make -C $(PRINTF_DIR) fclean
 	@make -C $(LIBMLX_DIR) clean
 	@make -C $(GNL_DIR) fclean
 

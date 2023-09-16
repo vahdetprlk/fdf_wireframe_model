@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/15 01:44:49 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/16 19:43:26 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # include <string.h>
-
 
 typedef struct s_mlx
 {
@@ -32,17 +31,27 @@ typedef struct s_point
 	float	brightness;
 }	t_point;
 
+typedef struct s_point_arr
+{
+	int	z;
+	int	color;
+}	t_point_arr;
+typedef struct s_map
+{
+	t_point_arr	**points;
+	int			axis;
+	int			ordinate;
+
+}	t_map;
 typedef struct s_vars
 {
 	t_mlx	m;
+	t_map	map;
 	char	*data_addr;
 	int		size_line;
 	int		bpp;
 	int		endian;
 	void	*img_ptr;
-	int		**map;
-	int 	axis;
-	int		ordinate;
 }	t_vars;
 
 char	**ft_split(char const *s, char c);
@@ -51,5 +60,6 @@ void	*ft_memcpy(void *dst, const void *src, size_t n);
 char	**ft_free_tab(char **tab);
 void	**ft_free_map(t_vars *vars);
 int		ft_atoi(const char *str);
+int		ft_atoi_hex(const char *str);
 
 #endif
