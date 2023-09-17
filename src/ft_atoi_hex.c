@@ -6,13 +6,13 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 18:25:44 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/16 19:03:30 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/17 14:24:24 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-int	ft_test(int c)
+static int	ft_check(int c)
 {
 	int	i;
 
@@ -26,7 +26,7 @@ int	ft_test(int c)
 	return (-1);
 }
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+static int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
 
@@ -62,7 +62,7 @@ int	ft_atoi_hex(const char *str)
 		str++;
 	if (*str == '-' || *str == '+')
 		return (0);
-	while (ft_test(*str) != -1)
-		result = (result * 16) + ft_test(*str++);
+	while (ft_check(*str) != -1)
+		result = (result * 16) + ft_check(*str++);
 	return (result * sign);
 }

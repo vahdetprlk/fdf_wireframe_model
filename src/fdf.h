@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/16 19:43:26 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/17 19:03:22 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # define WIDTH 1920
 # define HEIGHT 1080
-# include <string.h>
 
 typedef struct s_mlx
 {
@@ -41,7 +40,6 @@ typedef struct s_map
 	t_point_arr	**points;
 	int			axis;
 	int			ordinate;
-
 }	t_map;
 typedef struct s_vars
 {
@@ -55,11 +53,28 @@ typedef struct s_vars
 }	t_vars;
 
 char	**ft_split(char const *s, char c);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
 char	**ft_free_tab(char **tab);
 void	**ft_free_map(t_vars *vars);
 int		ft_atoi(const char *str);
 int		ft_atoi_hex(const char *str);
+void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars);
+
+float	ft_fpart(float x);
+float	ft_rfpart(float x);
+int		ft_ipart(float x);
+int		ft_abs(int x);
+
+int		ft_count_axis(char *line);
+void	ft_read_map(t_vars *vars, char *file);
+void	ft_check_map(char *file, t_vars *vars);
+void	ft_check_axis(char *line, int axis);
+
+void	ft_vars_init(t_vars	*vars);
+void	ft_hooks(t_vars *vars);
+
+void	ft_file_close(int fd, t_vars *vars);
+void	ft_error(char *msg, t_vars *vars, char **splitted_str);
+
+void	ft_draw(t_vars *vars);
 
 #endif

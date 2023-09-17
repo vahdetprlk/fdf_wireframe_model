@@ -6,11 +6,11 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 01:42:14 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/15 01:43:00 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/17 14:18:18 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(int c)
+static int	ft_isdigit(int c)
 {
 	return ('0' <= c && c <= '9');
 }

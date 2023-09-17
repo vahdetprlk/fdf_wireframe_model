@@ -6,14 +6,14 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:50:31 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/15 01:12:10 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/17 14:40:20 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <stdlib.h>
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+static void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
 	const char	*s;
 	char		*d;
@@ -27,6 +27,25 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
+static size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	len_src;
+	size_t	len;
+
+	len_src = 0;
+	while (src[len_src] != '\0')
+		len_src++;
+	if (dstsize)
+	{
+		if (len_src >= dstsize)
+			len = dstsize - 1;
+		else
+			len = len_src;
+		ft_memcpy(dst, src, len);
+		dst[len] = '\0';
+	}
+	return (len_src);
+}
 
 static size_t	ft_nb_words(char const *s, char c)
 {
