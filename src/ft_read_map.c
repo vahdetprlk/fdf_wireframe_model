@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:23:41 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/17 19:00:35 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/17 21:51:29 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,16 @@ static void	ft_map_read_loop(int fd, int y, t_vars *vars)
 	ft_free_tab(splitted_line);
 }
 
+void	ft_check_axis(char *line, int axis)
+{
+	if (axis != ft_count_axis(line))
+	{
+		write(2, "Map dimension error\n", 20);
+		free(line);
+		exit(EXIT_FAILURE);
+	}
+}
+
 void	ft_read_map(t_vars *vars, char *file)
 {
 	int		fd;
@@ -59,14 +69,4 @@ void	ft_read_map(t_vars *vars, char *file)
 		y++;
 	}
 	ft_file_close(fd, vars);
-}
-
-void	ft_check_axis(char *line, int axis)
-{
-	if (axis != ft_count_axis(line))
-	{
-		write(2, "Map dimension error\n", 20);
-		free(line);
-		exit(EXIT_FAILURE);
-	}
 }

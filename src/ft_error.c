@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_utils.c                                      :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:51:20 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/17 18:41:49 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/17 21:56:17 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,6 @@ char	**ft_free_tab(char **tab)
 	return (NULL);
 }
 
-void	ft_error(char *msg, t_vars *vars, char **splitted_str)
-{
-	perror(msg);
-	if (vars != NULL)
-		ft_free_map(vars);
-	if (splitted_str != NULL)
-		ft_free_tab(splitted_str);
-	exit(EXIT_FAILURE);
-}
-
 void	ft_file_close(int fd, t_vars *vars)
 {
 	if (close(fd) == -1)
@@ -62,4 +52,14 @@ void	ft_file_close(int fd, t_vars *vars)
 		perror("File close error");
 		exit(EXIT_FAILURE);
 	}
+}
+
+void	ft_error(char *msg, t_vars *vars, char **splitted_str)
+{
+	perror(msg);
+	if (vars != NULL)
+		ft_free_map(vars);
+	if (splitted_str != NULL)
+		ft_free_tab(splitted_str);
+	exit(EXIT_FAILURE);
 }

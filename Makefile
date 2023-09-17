@@ -6,9 +6,10 @@
 #    By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/22 14:36:10 by vparlak           #+#    #+#              #
-#    Updated: 2023/09/17 17:06:48 by vparlak          ###   ########.fr        #
+#    Updated: 2023/09/17 22:04:58 by vparlak          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NAME = fdf
 
@@ -16,18 +17,16 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
 SRC =   src/fdf.c \
-		src/ft_split.c \
-		src/ft_atoi.c \
 		src/ft_atoi_hex.c \
-		src/line_algorithm.c \
-		src/math_utils.c \
-		src/map_utils_1.c \
-		src/map_utils_2.c \
-		src/mlx_utils.c \
+		src/ft_atoi.c \
+		src/ft_check_map.c \
+		src/ft_draw_line.c \
 		src/ft_draw.c \
-		src/error_utils.c
-
-
+		src/ft_error.c \
+		src/ft_math.c \
+		src/ft_read_map.c \
+		src/ft_split.c \
+		src/ft_vars_init.c
 
 OBJ =  $(SRC:.c=.o)
 
