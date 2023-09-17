@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/17 19:04:29 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/17 19:19:42 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_draw(t_vars *vars)
 		j = 0;
 		while (j < vars->map.axis)
 		{
-			printf("%d,0x%X ", vars->map.points[j][i].z,
+			printf("%d,0x%x ", vars->map.points[j][i].z,
 				vars->map.points[j][i].color);
 			j++;
 		}
