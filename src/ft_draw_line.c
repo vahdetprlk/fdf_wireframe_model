@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   line_algorithm.c                                   :+:      :+:    :+:   */
+/*   ft_draw_line.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 14:47:14 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/17 15:04:02 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/18 17:56:32 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ static void	ft_draw_pixel(int x, int y, float brightness, t_vars *vars)
 	int	offset;
 
 	offset = y * (vars->size_line) + x * ((vars->bpp) / 8);
-	vars->data_addr[offset] = 0x00 * brightness;
-	vars->data_addr[offset + 1] = 0x7F * brightness;
-	vars->data_addr[offset + 2] = 0xFF * brightness;
+	vars->data_addr[offset] = 0xFF * brightness;
+	vars->data_addr[offset + 1] = 0x00 * brightness;
+	vars->data_addr[offset + 2] = 0x00 * brightness;
 }
 
 static void	ft_draw_pixel_loop(int is_steep, float intery, int x, t_vars *vars)

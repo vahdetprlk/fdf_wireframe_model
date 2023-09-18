@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_utils_1.c                                      :+:      :+:    :+:   */
+/*   ft_check_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:05:34 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/17 21:00:57 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/18 17:52:41 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ static int	ft_find_ordinate(int fd, int axis)
 		ft_check_axis(line, axis);
 		ordinate++;
 	}
-	free(line);
 	ft_file_close(fd, NULL);
 	return (ordinate);
 }
@@ -81,7 +80,7 @@ static void	ft_init_map(t_vars *vars, char *file)
 	i = 0;
 	while (i < vars->map.axis)
 	{
-		vars->map.points[i] = malloc(sizeof(t_point) * vars->map.ordinate);
+		vars->map.points[i] = malloc(sizeof(t_point_arr) * vars->map.ordinate);
 		if (!vars->map.points[i])
 			ft_error("Malloc error", vars, NULL);
 		i++;

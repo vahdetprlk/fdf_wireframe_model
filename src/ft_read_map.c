@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_utils_2.c                                      :+:      :+:    :+:   */
+/*   ft_read_map.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:23:41 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/17 21:51:29 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/18 17:45:52 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include "get_next_line.h"
+#include <stdio.h>
 
 static void	ft_map_read_loop(int fd, int y, t_vars *vars)
 {

@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/17 19:03:22 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/18 17:58:01 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ typedef struct s_mlx
 
 typedef struct s_point
 {
-	int		x;
-	int		y;
+	float	x;
+	float	y;
 	int		z;
 	float	brightness;
 }	t_point;
