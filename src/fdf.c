@@ -6,13 +6,29 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/18 18:37:34 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/18 20:07:17 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "mlx.h"
 #include <unistd.h>
+#include <stdio.h>
+
+int	handle_loop(void *params)
+{
+	t_vars	*vars;
+	static int 	angle;
+
+	vars = params;
+	mlx_clear_window(vars->m.mlx, vars->m.win);
+
+	angle++;
+	usleep(3000);
+	ft_draw(vars, angle);
+	mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
+	return (0);
+}
 
 int	main(int argc, char **argv)
 {
@@ -24,12 +40,11 @@ int	main(int argc, char **argv)
 		(void)argv;
 	//	ft_check_map(argv[1], vars);
 		ft_vars_init(vars);
-		mlx_do_sync(vars->m.mlx);
-		ft_draw(vars);
-		mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
 		ft_hooks(vars);
+		mlx_loop_hook(vars->m.mlx, handle_loop, vars);
 		mlx_loop(vars->m.mlx);
 	}
 	write(2, "Usage: ./fdf <filename>\n", 24);
 	return (0);
 }
+

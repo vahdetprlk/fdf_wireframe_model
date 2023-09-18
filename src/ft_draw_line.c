@@ -6,11 +6,12 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 14:47:14 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/18 17:56:32 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/18 20:02:23 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <math.h>
 
 static int	ft_swap_origins(t_point *point_1, t_point *point_2)
 {
@@ -45,9 +46,9 @@ static void	ft_draw_pixel(int x, int y, float brightness, t_vars *vars)
 	int	offset;
 
 	offset = y * (vars->size_line) + x * ((vars->bpp) / 8);
-	vars->data_addr[offset] = 0xFF * brightness;
-	vars->data_addr[offset + 1] = 0x00 * brightness;
-	vars->data_addr[offset + 2] = 0x00 * brightness;
+	vars->data_addr[offset] = 0x00 * brightness;
+	vars->data_addr[offset + 1] = 0x7F * brightness;
+	vars->data_addr[offset + 2] = 0xFF * brightness;
 }
 
 static void	ft_draw_pixel_loop(int is_steep, float intery, int x, t_vars *vars)
@@ -93,12 +94,12 @@ void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars)
 	point_1.brightness = 1;
 	point_2.brightness = 1;
 	if (is_steep)
-		ft_draw_pixel(point_1.y, point_1.x, 1, vars);
+		ft_draw_pixel(round(point_1.y), round(point_1.x), 1, vars);
 	else
-		ft_draw_pixel(point_1.x, point_1.y, 1, vars);
+		ft_draw_pixel(round(point_1.x), round(point_1.y), 1, vars);
 	if (is_steep)
-		ft_draw_pixel(point_2.y, point_2.x, 1, vars);
+		ft_draw_pixel(round(point_2.y), round(point_2.x), 1, vars);
 	else
-		ft_draw_pixel(point_2.x, point_2.y, 1, vars);
+		ft_draw_pixel(round(point_2.x), round(point_2.y), 1, vars);
 	ft_draw_loop(point_1, point_2, is_steep, vars);
 }
