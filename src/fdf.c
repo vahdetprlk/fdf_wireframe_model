@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/18 20:07:17 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/18 22:19:30 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,11 @@
 int	handle_loop(void *params)
 {
 	t_vars	*vars;
-	static int 	angle;
 
 	vars = params;
 	mlx_clear_window(vars->m.mlx, vars->m.win);
 
-	angle++;
-	usleep(3000);
-	ft_draw(vars, angle);
+	ft_draw(vars);
 	mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/18 19:56:44 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/18 22:19:36 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,6 @@ void	ft_hooks(t_vars *vars);
 void	ft_file_close(int fd, t_vars *vars);
 void	ft_error(char *msg, t_vars *vars, char **splitted_str);
 
-void	ft_draw(t_vars *vars, int angle);
+void	ft_draw(t_vars *vars);
 
 #endif

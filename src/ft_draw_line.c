@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 14:47:14 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/18 20:02:23 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/18 22:50:42 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,3 +103,4 @@ void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars)
 		ft_draw_pixel(round(point_2.x), round(point_2.y), 1, vars);
 	ft_draw_loop(point_1, point_2, is_steep, vars);
 }
+
