@@ -6,7 +6,7 @@
 #    By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/22 14:36:10 by vparlak           #+#    #+#              #
-#    Updated: 2023/09/17 22:04:58 by vparlak          ###   ########.fr        #
+#    Updated: 2023/09/20 00:46:19 by vparlak          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 SRC =   src/fdf.c \
 		src/ft_atoi_hex.c \
 		src/ft_atoi.c \
+		src/ft_calloc.c \
 		src/ft_check_map.c \
 		src/ft_draw_line.c \
 		src/ft_draw.c \

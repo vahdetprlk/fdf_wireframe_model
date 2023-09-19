@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:05:34 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/19 19:02:12 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/20 00:43:06 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,14 @@ static void	ft_init_map(t_vars *vars, char *file)
 {
 	int	i;
 
-	vars->map.points = malloc(sizeof(t_point_arr *) * vars->map.axis);
+	vars->map.points = ft_calloc(vars->map.axis, sizeof(t_point_arr *));
 	if (!vars->map.points)
 		ft_error("Malloc error", NULL, NULL);
 	i = 0;
 	while (i < vars->map.axis)
 	{
-		vars->map.points[i] = malloc(sizeof(t_point_arr) * vars->map.ordinate);
+		vars->map.points[i]
+			= ft_calloc(vars->map.ordinate, sizeof(t_point_arr));
 		if (!vars->map.points[i])
 			ft_error("Malloc error", vars, NULL);
 		i++;

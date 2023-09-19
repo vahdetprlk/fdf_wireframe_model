@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/19 20:28:01 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/20 00:45:40 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ typedef struct s_point
 	int		z;
 	float	brightness;
 }	t_point;
+
+typedef struct s_render_map
+{
+	float	x;
+	float	y;
+	float	z;
+}	t_render_map;
 
 typedef struct s_point_arr
 {
@@ -58,6 +65,7 @@ char	**ft_free_tab(char **tab);
 void	**ft_free_map(t_vars *vars);
 int		ft_atoi(const char *str);
 int		ft_atoi_hex(const char *str);
+void	*ft_calloc(int count, int size);
 void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars);
 
 float	ft_fpart(float x);
