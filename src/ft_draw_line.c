@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 14:47:14 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/18 22:50:42 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/19 18:57:50 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,18 @@ static void	ft_draw_pixel(int x, int y, float brightness, t_vars *vars)
 {
 	int	offset;
 
-	offset = y * (vars->size_line) + x * ((vars->bpp) / 8);
-	vars->data_addr[offset] = 0x00 * brightness;
-	vars->data_addr[offset + 1] = 0x7F * brightness;
-	vars->data_addr[offset + 2] = 0xFF * brightness;
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
+	{
+		offset = y * (vars->size_line) + x * ((vars->bpp) / 8);
+		if (vars->data_addr[offset] < 127
+			&& vars->data_addr[offset + 1] < 127
+			&& vars->data_addr[offset + 2] < 127)
+		{
+			vars->data_addr[offset] = 0x00 * brightness;
+			vars->data_addr[offset + 1] = 0x7F * brightness;
+			vars->data_addr[offset + 2] = 0xFF * brightness;
+		}
+	}
 }
 
 static void	ft_draw_pixel_loop(int is_steep, float intery, int x, t_vars *vars)
@@ -103,4 +111,3 @@ void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars)
 		ft_draw_pixel(round(point_2.x), round(point_2.y), 1, vars);
 	ft_draw_loop(point_1, point_2, is_steep, vars);
 }
-

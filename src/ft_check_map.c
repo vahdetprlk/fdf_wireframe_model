@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:05:34 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/18 17:52:41 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/19 19:02:12 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static void	ft_init_map(t_vars *vars, char *file)
 	ft_read_map(vars, file);
 }
 
-void	ft_check_map(char *file, t_vars *vars)
+void	ft_check_map(char *file, t_vars *vars) // eğer harita 2x2 den küçükse bir ayar çekilecek yerler var
 {
 	int	fd;
 
