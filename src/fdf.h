@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/20 00:45:40 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/20 17:52:18 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ typedef struct s_vars
 	int		bpp;
 	int		endian;
 	void	*img_ptr;
+	float	x_offset;
+	float	y_offset;
 	float	offset;
 }	t_vars;
 

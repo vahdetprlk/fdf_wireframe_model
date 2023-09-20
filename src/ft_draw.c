@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/20 15:54:37 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/20 18:44:11 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "mlx.h"
+#include <stdio.h>
 
 void	orjin_delta(t_point *point, int orjin_x, int orjin_y)
 {
@@ -40,7 +41,7 @@ t_point	ft_rotation_2d(t_point p1, t_point origin, int teta)
 void	ft_draw(t_vars *vars)
 {
 	t_render_map **map;
-	// int angle = 33;
+	 int angle = 30;
 		t_point	p1;
 	t_point	p2;
 	t_point point;
@@ -48,8 +49,8 @@ void	ft_draw(t_vars *vars)
 	int		x;
 	int		y;
 
-	origin.x = ((WIDTH - vars->map.axis * (vars->offset)) + vars->offset ) / 2;
-	origin.y = ((HEIGHT - vars->map.ordinate * vars->offset) + vars->offset) / 2 ;
+	origin.x = ((WIDTH - ((vars->map.axis + vars->map.ordinate) * vars->x_offset)) / 2) + (vars->x_offset * vars->map.ordinate);
+	origin.y = ((HEIGHT - ((vars->map.axis + vars->map.ordinate) * vars->y_offset)) / 2) + (vars->y_offset);
 	map = ft_calloc(vars->map.axis, sizeof(t_render_map *));
 	// if map yoksa leak kontrol
 	x = 0;
@@ -80,7 +81,7 @@ void	ft_draw(t_vars *vars)
 		{
 			point.x = map[x][y].x;
 			point.y = map[x][y].y;
-			//point = ft_rotation_2d(point, origin, angle);
+			point = ft_rotation_2d(point, origin, angle);
 			map[x][y].x = point.x;
 			map[x][y].y = point.y;
 			y++;
@@ -97,7 +98,7 @@ void	ft_draw(t_vars *vars)
 		{
 			point.x = map[x][y].x;
 			point.y = map[x][y].y;
-			//point = ft_rotation_2d(point, origin,  (180 - (90 + angle)) - angle );
+			point = ft_rotation_2d(point, origin,  (180 - (90 + angle)) - angle );
 			map[x][y].x = point.x;
 			map[x][y].y = point.y - map[x][y].z;
 			//mlx_pixel_put(vars->m.mlx, vars->m.win, round(map[x][y].x), round(map[x][y].y), 0x00FFFFFF);
