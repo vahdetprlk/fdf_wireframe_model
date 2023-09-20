@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/20 00:56:48 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/20 15:51:59 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,25 @@
 #include "mlx.h"
 #include <unistd.h>
 #include <stdio.h>
+#include <math.h>
 
 void	ft_calculate_offset(t_vars	*vars)
 {
-	float width_offset = (WIDTH * 0.8) / vars->map.axis;
-	float height_offset = (HEIGHT * 0.8) / vars->map.ordinate;
-	float width_border = WIDTH * 0.1;
-	float height_border = HEIGHT * 0.1;
-	if (width_offset <= height_offset)
-	{
-		printf("Soldan, Sağdan: %f\n", width_border);
-		printf("Ofset: %f", width_offset);
-		vars->offset = width_offset;
-	}
-	else
-	{
-		printf("Alttan, Üstten: %f\n", height_border);
-		printf("Ofset: %f", height_offset);
-		vars->offset = height_offset;
-	}
-	if (vars->offset > 100)
-		vars->offset = 100;
+	int	x;
+	int	y;
+	float x_offset;
+	float y_offset;
+
+	y = vars->map.axis;
+	x = vars->map.axis;
+
+	x_offset = WIDTH * 0.8;
+	x_offset = x_offset / vars->map.axis;
+	y_offset = HEIGHT * 0.8;
+	y_offset = y_offset / vars->map.ordinate;
+	if (y_offset > x_offset)
+		vars->offset = x_offset;
+	vars->offset = y_offset;
 }
 
 int	main(int argc, char **argv)

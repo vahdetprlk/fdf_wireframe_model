@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/20 02:02:01 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/20 15:54:37 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_point	ft_rotation_2d(t_point p1, t_point origin, int teta)
 void	ft_draw(t_vars *vars)
 {
 	t_render_map **map;
-	int angle = 33;
+	// int angle = 33;
 		t_point	p1;
 	t_point	p2;
 	t_point point;
@@ -48,8 +48,8 @@ void	ft_draw(t_vars *vars)
 	int		x;
 	int		y;
 
-	origin.x = ((WIDTH - (vars->offset * (vars->map.axis))) + vars->offset) / 2;
-	origin.y = ((HEIGHT - (vars->offset * (vars->map.ordinate))) + vars->offset) / 2;
+	origin.x = ((WIDTH - vars->map.axis * (vars->offset)) + vars->offset ) / 2;
+	origin.y = ((HEIGHT - vars->map.ordinate * vars->offset) + vars->offset) / 2 ;
 	map = ft_calloc(vars->map.axis, sizeof(t_render_map *));
 	// if map yoksa leak kontrol
 	x = 0;
@@ -80,7 +80,7 @@ void	ft_draw(t_vars *vars)
 		{
 			point.x = map[x][y].x;
 			point.y = map[x][y].y;
-			point = ft_rotation_2d(point, origin, angle);
+			//point = ft_rotation_2d(point, origin, angle);
 			map[x][y].x = point.x;
 			map[x][y].y = point.y;
 			y++;
@@ -97,7 +97,7 @@ void	ft_draw(t_vars *vars)
 		{
 			point.x = map[x][y].x;
 			point.y = map[x][y].y;
-			point = ft_rotation_2d(point, origin,  (180 - (90 + angle)) - angle );
+			//point = ft_rotation_2d(point, origin,  (180 - (90 + angle)) - angle );
 			map[x][y].x = point.x;
 			map[x][y].y = point.y - map[x][y].z;
 			//mlx_pixel_put(vars->m.mlx, vars->m.win, round(map[x][y].x), round(map[x][y].y), 0x00FFFFFF);
@@ -136,58 +136,9 @@ void	ft_draw(t_vars *vars)
 		}
 		x++;
 	}
-
-
-
 }
 
 
 
 
 
-
-/*
-void	ft_draw(t_vars *vars)
-{
-	t_point	p1;
-	t_point	p2;
-	t_point	origin;
-//	t_point relative_origin;
-	int		x;
-	int		y;
-
-	x = 1;
-	y = 1;
-	origin.x = ((WIDTH - (vars->offset * (vars->map.axis))) + vars->offset) / 2;
-	origin.y = ((HEIGHT - (vars->offset * (vars->map.ordinate))) + vars->offset) / 2;
-	while (y <= vars->map.ordinate)
-	{
-		x = 1;
-		while (x < vars->map.axis)
-		{
-			p1 = ft_rotation_2d(p1, origin, 30);
-			p2 = ft_rotation_2d(p2, origin, 30);
-			ft_draw_line(p1, p2, vars);
-			x++;
-		}
-		y++;
-	}
-	x = 1;
-	while (x <= vars->map.axis)
-	{
-		y = 1;
-		while (y < vars->map.ordinate)
-		{
-
-			p1.x = (x - 1) * vars->offset + origin.x;
-			p2.x = (x - 1) * vars->offset + origin.x;
-			p1.y = (y - 1) * vars->offset + origin.y;
-			p2.y = (y) * vars->offset + origin.y;
-			p1 = ft_rotation_2d(p1, origin, 30);
-			p2 = ft_rotation_2d(p2, origin, 30);
-			ft_draw_line(p1, p2, vars);
-			y++;
-		}
-		x++;
-	}
-} */
