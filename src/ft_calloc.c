@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 00:40:13 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/20 00:46:51 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 00:02:41 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	*ft_memset(void *b, int c, size_t len)
 	return (b);
 }
 
-static void	ft_bzero(void *s, int n)
+void	ft_bzero(void *s, int n)
 {
 	ft_memset(s, '\0', n);
 }

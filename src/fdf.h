@@ -6,15 +6,15 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/20 17:52:18 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 00:39:00 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 800
+# define HEIGHT 600
 
 typedef struct s_mlx
 {
@@ -27,7 +27,7 @@ typedef struct s_point
 	float	x;
 	float	y;
 	int		z;
-	float	brightness;
+	float	brightness; // kullanamadi[in yt]m]n] sil
 }	t_point;
 
 typedef struct s_render_map
@@ -52,6 +52,7 @@ typedef struct s_vars
 {
 	t_mlx	m;
 	t_map	map;
+	t_point	origin;
 	char	*data_addr;
 	int		size_line;
 	int		bpp;
@@ -60,6 +61,7 @@ typedef struct s_vars
 	float	x_offset;
 	float	y_offset;
 	float	offset;
+	int i;
 }	t_vars;
 
 char	**ft_split(char const *s, char c);
@@ -68,6 +70,7 @@ void	**ft_free_map(t_vars *vars);
 int		ft_atoi(const char *str);
 int		ft_atoi_hex(const char *str);
 void	*ft_calloc(int count, int size);
+void	ft_bzero(void *s, int n);
 void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars);
 
 float	ft_fpart(float x);

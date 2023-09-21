@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/20 18:44:11 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 00:45:49 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,13 @@ void	ft_draw(t_vars *vars)
 		t_point	p1;
 	t_point	p2;
 	t_point point;
-	t_point	origin;
 	int		x;
 	int		y;
 
-	origin.x = ((WIDTH - ((vars->map.axis + vars->map.ordinate) * vars->x_offset)) / 2) + (vars->x_offset * vars->map.ordinate);
-	origin.y = ((HEIGHT - ((vars->map.axis + vars->map.ordinate) * vars->y_offset)) / 2) + (vars->y_offset);
+	vars->origin.x = ((WIDTH - ((vars->map.axis + vars->map.ordinate) * vars->x_offset)) / 2) + (vars->x_offset * vars->map.ordinate);
+	vars->origin.y = ((HEIGHT - ((vars->map.axis + vars->map.ordinate) * vars->y_offset)) / 2) + (vars->y_offset);
+	vars->origin.x += vars->i;
+
 	map = ft_calloc(vars->map.axis, sizeof(t_render_map *));
 	// if map yoksa leak kontrol
 	x = 0;
@@ -66,8 +67,8 @@ void	ft_draw(t_vars *vars)
 		y = 0;
 		while (y < vars->map.ordinate)
 		{
-			map[x][y].x = (x * vars->offset) + origin.x;
-			map[x][y].y = (y * vars->offset) + origin.y;
+			map[x][y].x = (x * vars->offset) + vars->origin.x;
+			map[x][y].y = (y * vars->offset) + vars->origin.y;
 			map[x][y].z = (vars->map.points[x][y].z * vars->offset);
 			y++;
 		}
@@ -81,7 +82,7 @@ void	ft_draw(t_vars *vars)
 		{
 			point.x = map[x][y].x;
 			point.y = map[x][y].y;
-			point = ft_rotation_2d(point, origin, angle);
+			point = ft_rotation_2d(point, vars->origin, angle);
 			map[x][y].x = point.x;
 			map[x][y].y = point.y;
 			y++;
@@ -92,13 +93,13 @@ void	ft_draw(t_vars *vars)
 	while (x < vars->map.axis)
 	{
 		y = 0;
-		origin.x = map[x][y].x;
-		origin.y = map[x][y].y;
+		vars->origin.x = map[x][y].x;
+		vars->origin.y = map[x][y].y;
 		while (y < vars->map.ordinate)
 		{
 			point.x = map[x][y].x;
 			point.y = map[x][y].y;
-			point = ft_rotation_2d(point, origin,  (180 - (90 + angle)) - angle );
+			point = ft_rotation_2d(point, vars->origin,  (180 - (90 + angle)) - angle );
 			map[x][y].x = point.x;
 			map[x][y].y = point.y - map[x][y].z;
 			//mlx_pixel_put(vars->m.mlx, vars->m.win, round(map[x][y].x), round(map[x][y].y), 0x00FFFFFF);

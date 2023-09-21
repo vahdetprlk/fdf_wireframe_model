@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/20 19:28:38 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 00:39:39 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,20 @@
 #include <stdio.h>
 #include <math.h>
 
+void	ft_clear_win(t_vars *vars)
+{
+	int	j;
+
+	j = WIDTH * HEIGHT * 4;
+	ft_bzero(vars->data_addr, j);
+}
+
 void	ft_calculate_offset(t_vars	*vars)
 {
 	int		x;
 	int		y;
 	float	x_offset;
 	float	y_offset;
-	float	z_offset;
 
 	int min_z = 0;
 	int max_z = 0;
@@ -44,8 +51,6 @@ void	ft_calculate_offset(t_vars	*vars)
 	x_offset = x_offset / (vars->map.axis + vars->map.ordinate)/*  * cos(30 * M_PI / 180) */;
 	y_offset = HEIGHT * 0.8;
 	y_offset = y_offset / (vars->map.axis + vars->map.ordinate)/*  * sin(30 * M_PI / 180) */;
-	z_offset = HEIGHT * 0.8;
-	z_offset = 
 	if (HEIGHT / y_offset > WIDTH / x_offset)
 	{
 		vars->x_offset = x_offset;
@@ -58,7 +63,17 @@ void	ft_calculate_offset(t_vars	*vars)
 		vars->y_offset = y_offset;
 		vars->offset = y_offset / sin(30 * M_PI / 180);
 	}
+	vars->i = 0;
+}
 
+int	ft_loop_mlx(t_vars *vars)
+{
+	ft_clear_win(vars);
+	printf("%f, %f\n", vars->origin.x, vars->origin.y);
+	ft_draw(vars);
+
+	mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -71,8 +86,9 @@ int	main(int argc, char **argv)
 		ft_check_map(argv[1], vars);
 		ft_vars_init(vars);
 		ft_calculate_offset(vars);
-		ft_draw(vars);
-		mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
+		mlx_loop_hook(vars->m.mlx, ft_loop_mlx, vars);
+		// ft_draw(vars);
+		// mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
 		ft_hooks(vars);
 		mlx_loop(vars->m.mlx);
 	}

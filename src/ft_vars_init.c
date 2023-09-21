@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_utils.c                                        :+:      :+:    :+:   */
+/*   ft_vars_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:18:19 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/17 21:53:31 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 00:39:52 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	ft_close_x(t_vars *vars)
 	return (1);
 }
 
-static int	ft_close(int keycode, t_vars *vars)
+static int	ft_key_press(int keycode, t_vars *vars)
 {
 	if (keycode == 53)
 	{
@@ -33,12 +33,24 @@ static int	ft_close(int keycode, t_vars *vars)
 		mlx_destroy_window(vars->m.mlx, vars->m.win);
 		exit(EXIT_SUCCESS);
 	}
+	if (keycode == 0)
+		vars->offset++;
+	if (keycode == 1)
+		vars->offset--;
+	if (keycode == 2)
+		vars->i++;
+	if (keycode	== 3)
+		vars->origin.x--;
+	if (keycode == 4)
+		vars->origin.y++;
+	if (keycode	== 5)
+		vars->origin.y--;
 	return (1);
 }
 
 void	ft_hooks(t_vars *vars)
 {
-	mlx_hook(vars->m.win, 2, 1L << 2, ft_close, vars);
+	mlx_hook(vars->m.win, 2, 1L << 2, ft_key_press, vars);
 	mlx_hook(vars->m.win, 17, 1L << 17, ft_close_x, vars);
 }
 
