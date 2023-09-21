@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:23:41 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 17:20:19 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 23:24:01 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include "get_next_line.h"
-#include <stdio.h>
 
 int	ft_count_axis(char *line)
 {

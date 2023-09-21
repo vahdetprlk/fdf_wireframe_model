@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 17:46:09 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 23:19:54 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <math.h>
 
-void	ft_clear_win(t_vars *vars)
+static void	ft_clear_win(t_vars *vars)
 {
 	int	j;
 
@@ -23,33 +23,38 @@ void	ft_clear_win(t_vars *vars)
 	ft_bzero(vars->data_addr, j);
 }
 
-void	ft_calculate_offset(t_vars	*vars)
+void	ft_find_min_max_z(t_vars *vars) //bunu kullanmazsan sil
 {
-	int		x;
-	int		y;
-	float	x_offset;
-	float	y_offset;
+	int	x;
+	int	y;
 
-	int min_z = 0;
-	int max_z = 0;
+	vars->min_z = 0;
+	vars->max_z = 0;
 	x = 0;
 	while (x < vars->map.axis)
 	{
 		y = 0;
 		while (y < vars->map.ordinate)
 		{
-			if (min_z > vars->map.points[x][y].z)
-				min_z = vars->map.points[x][y].z;
-			if (max_z < vars->map.points[x][y].z)
-				max_z = vars->map.points[x][y].z;
+			if (vars->min_z > vars->map.points[x][y].z)
+				vars->min_z = vars->map.points[x][y].z;
+			if (vars->max_z < vars->map.points[x][y].z)
+				vars->max_z = vars->map.points[x][y].z;
 			y++;
 		}
 		x++;
 	}
+}
+
+static void	ft_calculate_offset(t_vars	*vars)
+{
+	float	x_offset;
+	float	y_offset;
+
 	x_offset = WIDTH * 0.8;
-	x_offset = x_offset / (vars->map.axis + vars->map.ordinate)/*  * cos(30 * M_PI / 180) */;
+	x_offset = x_offset / (vars->map.axis + vars->map.ordinate);
 	y_offset = HEIGHT * 0.8;
-	y_offset = y_offset / (vars->map.axis + vars->map.ordinate)/*  * sin(30 * M_PI / 180) */;
+	y_offset = y_offset / (vars->map.axis + vars->map.ordinate);
 	if (HEIGHT / y_offset > WIDTH / x_offset)
 	{
 		vars->x_offset = x_offset;
@@ -65,7 +70,7 @@ void	ft_calculate_offset(t_vars	*vars)
 	vars->i = 0;
 }
 
-int	ft_loop_mlx(t_vars *vars)
+static int	ft_loop_mlx(t_vars *vars)
 {
 	ft_clear_win(vars);
 	ft_draw(vars);

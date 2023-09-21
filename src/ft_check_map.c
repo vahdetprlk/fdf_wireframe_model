@@ -6,14 +6,14 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:05:34 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 17:22:16 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 23:20:37 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <stdlib.h>
 #include <fcntl.h>
-#include <stdio.h>
+// #include <stdio.h>
 #include "get_next_line.h"
 
 static int	ft_find_axis(char *file, int *fd)

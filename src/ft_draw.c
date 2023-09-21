@@ -6,50 +6,17 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 17:43:47 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 23:21:34 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <math.h>
-#include <stdlib.h>
-#include "mlx.h"
-#include <stdio.h>
 
-void	orjin_delta(t_point *point, int orjin_x, int orjin_y)
+static void	ft_set_r_map(t_vars *vars)
 {
-	point->x = point->x + orjin_x;
-	point->y = point->y + orjin_y;
-}
+	int		x;
+	int		y;
 
-t_point	ft_rotation_2d(t_point p1, t_point origin, int teta) //z-axis
-{
-	t_point	tmp_point;
-
-	teta %= 360;
-	p1.x = p1.x - origin.x;
-	p1.y = p1.y - origin.y;
-	tmp_point.x = (p1.x * cos(teta * (M_PI / 180)))
-		- (p1.y * sin(teta * (M_PI / 180)));
-	tmp_point.y = (p1.x * sin(teta * (M_PI / 180)))
-		+ (p1.y * cos(teta * (M_PI / 180)));
-	tmp_point.x = tmp_point.x + origin.x;
-	tmp_point.y = tmp_point.y + origin.y;
-	return (tmp_point);
-}
-
-void	ft_draw(t_vars *vars)
-{
-	t_point			p1;
-	t_point			p2;
-	t_point			point;
-	int				x;
-	int				y;
-
-	vars->origin.x = ((WIDTH - ((vars->map.axis + vars->map.ordinate) * vars->x_offset)) / 2) + (vars->x_offset * vars->map.ordinate);
-	vars->origin.y = ((HEIGHT - ((vars->map.axis + vars->map.ordinate) * vars->y_offset)) / 2) + (vars->y_offset);
-	vars->origin.x += vars->i;
-	vars->origin.y += vars->j;
 	x = 0;
 	while (x < vars->map.axis)
 	{
@@ -63,38 +30,15 @@ void	ft_draw(t_vars *vars)
 		}
 		x++;
 	}
-	x = 0;
-	while (x < vars->map.axis)
-	{
-		y = 0;
-		while (y < vars->map.ordinate)
-		{
-			point.x = vars->r_map[x][y].x;
-			point.y = vars->r_map[x][y].y;
-			point = ft_rotation_2d(point, vars->origin, vars->angle);
-			vars->r_map[x][y].x = point.x;
-			vars->r_map[x][y].y = point.y;
-			y++;
-		}
-		x++;
-	}
-	x = 0;
-	while (x < vars->map.axis)
-	{
-		y = 0;
-		vars->origin.x = vars->r_map[x][y].x;
-		vars->origin.y = vars->r_map[x][y].y;
-		while (y < vars->map.ordinate)
-		{
-			point.x = vars->r_map[x][y].x;
-			point.y = vars->r_map[x][y].y;
-			point = ft_rotation_2d(point, vars->origin,  (180 - (90 + vars->angle)) - vars->angle);
-			vars->r_map[x][y].x = point.x;
-			vars->r_map[x][y].y = point.y - vars->r_map[x][y].z;
-			y++;
-		}
-		x++;
-	}
+}
+
+static void	ft_draw_ordinate(t_vars *vars)
+{
+	t_point	p1;
+	t_point	p2;
+	int		x;
+	int		y;
+
 	y = 1;
 	while (y <= vars->map.ordinate)
 	{
@@ -110,6 +54,15 @@ void	ft_draw(t_vars *vars)
 		}
 		y++;
 	}
+}
+
+static void	ft_draw_axis(t_vars *vars)
+{
+	t_point	p1;
+	t_point	p2;
+	int		x;
+	int		y;
+
 	x = 1;
 	while (x <= vars->map.axis)
 	{
@@ -125,4 +78,19 @@ void	ft_draw(t_vars *vars)
 		}
 		x++;
 	}
+}
+
+void	ft_draw(t_vars *vars)
+{
+	vars->origin.x = ((WIDTH - ((vars->map.axis + vars->map.ordinate)
+					* vars->x_offset)) / 2)
+		+ (vars->x_offset * vars->map.ordinate);
+	vars->origin.y = ((HEIGHT - ((vars->map.axis + vars->map.ordinate)
+					* vars->y_offset)) / 2) + (vars->y_offset);
+	vars->origin.x += vars->i;
+	vars->origin.y += vars->j;
+	ft_set_r_map(vars);
+	ft_projection(vars);
+	ft_draw_axis(vars);
+	ft_draw_ordinate(vars);
 }

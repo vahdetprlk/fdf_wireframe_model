@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 17:43:18 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 23:12:20 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,14 @@ typedef struct s_point_arr
 	int	z;
 	int	color;
 }	t_point_arr;
+
 typedef struct s_map
 {
 	t_point_arr	**points;
 	int			axis;
 	int			ordinate;
 }	t_map;
+
 typedef struct s_vars
 {
 	t_mlx			m;
@@ -63,6 +65,8 @@ typedef struct s_vars
 	int				i;
 	int				j;
 	int				angle;
+	int				min_z;
+	int				max_z;
 }	t_vars;
 
 char	**ft_split(char const *s, char c);
@@ -92,5 +96,6 @@ void	ft_file_close(int fd, t_vars *vars);
 void	ft_error(char *msg, t_vars *vars, char **splitted_str, int status);
 
 void	ft_draw(t_vars *vars);
+void	ft_projection(t_vars *vars);
 
 #endif

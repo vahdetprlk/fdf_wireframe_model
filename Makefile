@@ -6,7 +6,7 @@
 #    By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/22 14:36:10 by vparlak           #+#    #+#              #
-#    Updated: 2023/09/20 00:46:19 by vparlak          ###   ########.fr        #
+#    Updated: 2023/09/21 23:05:20 by vparlak          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ SRC =   src/fdf.c \
 		src/ft_draw_line.c \
 		src/ft_draw.c \
 		src/ft_error.c \
+		src/ft_hooks.c\
 		src/ft_math.c \
+		src/ft_projection.c \
 		src/ft_read_map.c \
 		src/ft_split.c \
 		src/ft_vars_init.c
