@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 17:16:40 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 17:43:18 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_vars
 	float			offset;
 	int				i;
 	int				j;
+	int				angle;
 }	t_vars;
 
 char	**ft_split(char const *s, char c);

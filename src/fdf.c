@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 17:26:27 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 17:46:09 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int	main(int argc, char **argv)
 	if (argc == 2)
 	{
 		vars = &(t_vars){0};
+		vars->angle = 30;
 		ft_check_map(argv[1], vars);
 		ft_vars_init(vars);
 		ft_calculate_offset(vars);

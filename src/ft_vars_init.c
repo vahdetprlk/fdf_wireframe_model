@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:18:19 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 17:25:57 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 17:43:12 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,13 @@ static int	ft_key_press(int keycode, t_vars *vars)
 		vars->j += 4;
 	if (keycode == 5)
 		vars->j -= 4;
+	if (keycode == 6)
+	{
+		if (vars->angle == 30)
+			vars->angle = 0;
+		else if (vars->angle == 0)
+			vars->angle = 30;
+	}
 	return (1);
 }
 

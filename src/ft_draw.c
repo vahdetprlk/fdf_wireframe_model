@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 17:26:39 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 17:43:47 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,14 @@ t_point	ft_rotation_2d(t_point p1, t_point origin, int teta) //z-axis
 	return (tmp_point);
 }
 
-
-
 void	ft_draw(t_vars *vars)
 {
-	int				angle;
 	t_point			p1;
 	t_point			p2;
 	t_point			point;
 	int				x;
 	int				y;
 
-	angle = 30;
 	vars->origin.x = ((WIDTH - ((vars->map.axis + vars->map.ordinate) * vars->x_offset)) / 2) + (vars->x_offset * vars->map.ordinate);
 	vars->origin.y = ((HEIGHT - ((vars->map.axis + vars->map.ordinate) * vars->y_offset)) / 2) + (vars->y_offset);
 	vars->origin.x += vars->i;
@@ -75,7 +71,7 @@ void	ft_draw(t_vars *vars)
 		{
 			point.x = vars->r_map[x][y].x;
 			point.y = vars->r_map[x][y].y;
-			point = ft_rotation_2d(point, vars->origin, angle);
+			point = ft_rotation_2d(point, vars->origin, vars->angle);
 			vars->r_map[x][y].x = point.x;
 			vars->r_map[x][y].y = point.y;
 			y++;
@@ -92,7 +88,7 @@ void	ft_draw(t_vars *vars)
 		{
 			point.x = vars->r_map[x][y].x;
 			point.y = vars->r_map[x][y].y;
-			point = ft_rotation_2d(point, vars->origin,  (180 - (90 + angle)) - angle );
+			point = ft_rotation_2d(point, vars->origin,  (180 - (90 + vars->angle)) - vars->angle);
 			vars->r_map[x][y].x = point.x;
 			vars->r_map[x][y].y = point.y - vars->r_map[x][y].z;
 			y++;
