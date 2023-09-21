@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 01:03:23 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/22 01:56:17 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ typedef struct s_mlx
 	void	*win;
 }	t_mlx;
 
+typedef struct s_color
+{
+	int	red;
+	int	green;
+	int	blue;
+}	t_color;
+
 typedef struct s_point
 {
 	float	x;
@@ -31,9 +38,9 @@ typedef struct s_point
 
 typedef struct s_render_map
 {
-	float	x;
-	float	y;
-	float	z;
+	double	x;
+	double	y;
+	double	z;
 }	t_render_map;
 
 typedef struct s_point_arr
@@ -49,14 +56,6 @@ typedef struct s_map
 	int			ordinate;
 }	t_map;
 
-typedef struct s_color
-{
-	int	red;
-	int	green;
-	int	blue;
-}	t_color;
-
-
 typedef struct s_vars
 {
 	t_mlx			m;
@@ -68,8 +67,9 @@ typedef struct s_vars
 	int				bpp;
 	int				endian;
 	void			*img_ptr;
-	float			x_offset;
-	float			y_offset;
+	double			x_offset;
+	double			y_offset;
+	double			z_offset;
 	float			offset;
 	int				i;
 	int				j;

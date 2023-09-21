@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 00:14:04 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/22 01:57:46 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static void	ft_calculate_offset(t_vars	*vars)
 		vars->y_offset = y_offset;
 		vars->offset = y_offset / sin(vars->angle * M_PI / 180);
 	}
+	vars->z_offset = vars->offset;
 }
 
 static int	ft_loop_mlx(t_vars *vars)
