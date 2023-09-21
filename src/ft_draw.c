@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 00:45:49 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 17:26:39 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	orjin_delta(t_point *point, int orjin_x, int orjin_y)
 	point->y = point->y + orjin_y;
 }
 
-t_point	ft_rotation_2d(t_point p1, t_point origin, int teta)
+t_point	ft_rotation_2d(t_point p1, t_point origin, int teta) //z-axis
 {
 	t_point	tmp_point;
 
@@ -38,38 +38,31 @@ t_point	ft_rotation_2d(t_point p1, t_point origin, int teta)
 	return (tmp_point);
 }
 
+
+
 void	ft_draw(t_vars *vars)
 {
-	t_render_map **map;
-	 int angle = 30;
-		t_point	p1;
-	t_point	p2;
-	t_point point;
-	int		x;
-	int		y;
+	int				angle;
+	t_point			p1;
+	t_point			p2;
+	t_point			point;
+	int				x;
+	int				y;
 
+	angle = 30;
 	vars->origin.x = ((WIDTH - ((vars->map.axis + vars->map.ordinate) * vars->x_offset)) / 2) + (vars->x_offset * vars->map.ordinate);
 	vars->origin.y = ((HEIGHT - ((vars->map.axis + vars->map.ordinate) * vars->y_offset)) / 2) + (vars->y_offset);
 	vars->origin.x += vars->i;
-
-	map = ft_calloc(vars->map.axis, sizeof(t_render_map *));
-	// if map yoksa leak kontrol
-	x = 0;
-	while (x < vars->map.axis)
-	{
-		map[x] = ft_calloc(vars->map.ordinate, sizeof(t_render_map));
-		//if her map için leak kontolü
-		x++;
-	}
+	vars->origin.y += vars->j;
 	x = 0;
 	while (x < vars->map.axis)
 	{
 		y = 0;
 		while (y < vars->map.ordinate)
 		{
-			map[x][y].x = (x * vars->offset) + vars->origin.x;
-			map[x][y].y = (y * vars->offset) + vars->origin.y;
-			map[x][y].z = (vars->map.points[x][y].z * vars->offset);
+			vars->r_map[x][y].x = (x * vars->offset) + vars->origin.x;
+			vars->r_map[x][y].y = (y * vars->offset) + vars->origin.y;
+			vars->r_map[x][y].z = (vars->map.points[x][y].z * vars->offset);
 			y++;
 		}
 		x++;
@@ -80,11 +73,11 @@ void	ft_draw(t_vars *vars)
 		y = 0;
 		while (y < vars->map.ordinate)
 		{
-			point.x = map[x][y].x;
-			point.y = map[x][y].y;
+			point.x = vars->r_map[x][y].x;
+			point.y = vars->r_map[x][y].y;
 			point = ft_rotation_2d(point, vars->origin, angle);
-			map[x][y].x = point.x;
-			map[x][y].y = point.y;
+			vars->r_map[x][y].x = point.x;
+			vars->r_map[x][y].y = point.y;
 			y++;
 		}
 		x++;
@@ -93,16 +86,15 @@ void	ft_draw(t_vars *vars)
 	while (x < vars->map.axis)
 	{
 		y = 0;
-		vars->origin.x = map[x][y].x;
-		vars->origin.y = map[x][y].y;
+		vars->origin.x = vars->r_map[x][y].x;
+		vars->origin.y = vars->r_map[x][y].y;
 		while (y < vars->map.ordinate)
 		{
-			point.x = map[x][y].x;
-			point.y = map[x][y].y;
+			point.x = vars->r_map[x][y].x;
+			point.y = vars->r_map[x][y].y;
 			point = ft_rotation_2d(point, vars->origin,  (180 - (90 + angle)) - angle );
-			map[x][y].x = point.x;
-			map[x][y].y = point.y - map[x][y].z;
-			//mlx_pixel_put(vars->m.mlx, vars->m.win, round(map[x][y].x), round(map[x][y].y), 0x00FFFFFF);
+			vars->r_map[x][y].x = point.x;
+			vars->r_map[x][y].y = point.y - vars->r_map[x][y].z;
 			y++;
 		}
 		x++;
@@ -113,10 +105,10 @@ void	ft_draw(t_vars *vars)
 		x = 1;
 		while (x < vars->map.axis)
 		{
-			p1.x = map[x - 1][y - 1].x;
-			p1.y = map[x - 1][y - 1].y;
-			p2.x = map[x][y - 1].x;
-			p2.y = map[x][y - 1].y;
+			p1.x = vars->r_map[x - 1][y - 1].x;
+			p1.y = vars->r_map[x - 1][y - 1].y;
+			p2.x = vars->r_map[x][y - 1].x;
+			p2.y = vars->r_map[x][y - 1].y;
 			ft_draw_line(p1, p2, vars);
 			x++;
 		}
@@ -128,19 +120,13 @@ void	ft_draw(t_vars *vars)
 		y = 1;
 		while (y < vars->map.ordinate)
 		{
-
-			p1.x = map[x - 1][y - 1].x;
-			p1.y = map[x - 1][y - 1].y;
-			p2.x = map[x - 1][y].x;
-			p2.y = map[x - 1][y].y;
+			p1.x = vars->r_map[x - 1][y - 1].x;
+			p1.y = vars->r_map[x - 1][y - 1].y;
+			p2.x = vars->r_map[x - 1][y].x;
+			p2.y = vars->r_map[x - 1][y].y;
 			ft_draw_line(p1, p2, vars);
 			y++;
 		}
 		x++;
 	}
 }
-
-
-
-
-

@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 14:47:14 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/19 18:57:50 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 16:14:56 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,6 @@ void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars)
 	int		is_steep;
 
 	is_steep = ft_swap_origins(&point_1, &point_2);
-	point_1.brightness = 1;
-	point_2.brightness = 1;
 	if (is_steep)
 		ft_draw_pixel(round(point_1.y), round(point_1.x), 1, vars);
 	else

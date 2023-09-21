@@ -6,15 +6,15 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 00:39:00 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 17:16:40 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-# define WIDTH 800
-# define HEIGHT 600
+# define WIDTH 1920
+# define HEIGHT 1080
 
 typedef struct s_mlx
 {
@@ -26,8 +26,6 @@ typedef struct s_point
 {
 	float	x;
 	float	y;
-	int		z;
-	float	brightness; // kullanamadi[in yt]m]n] sil
 }	t_point;
 
 typedef struct s_render_map
@@ -50,23 +48,26 @@ typedef struct s_map
 }	t_map;
 typedef struct s_vars
 {
-	t_mlx	m;
-	t_map	map;
-	t_point	origin;
-	char	*data_addr;
-	int		size_line;
-	int		bpp;
-	int		endian;
-	void	*img_ptr;
-	float	x_offset;
-	float	y_offset;
-	float	offset;
-	int i;
+	t_mlx			m;
+	t_map			map;
+	t_render_map	**r_map;
+	t_point			origin;
+	char			*data_addr;
+	int				size_line;
+	int				bpp;
+	int				endian;
+	void			*img_ptr;
+	float			x_offset;
+	float			y_offset;
+	float			offset;
+	int				i;
+	int				j;
 }	t_vars;
 
 char	**ft_split(char const *s, char c);
 char	**ft_free_tab(char **tab);
-void	**ft_free_map(t_vars *vars);
+void	**ft_free_map_point(t_vars *vars);
+void	**ft_free_r_map(t_vars *vars);
 int		ft_atoi(const char *str);
 int		ft_atoi_hex(const char *str);
 void	*ft_calloc(int count, int size);
@@ -87,7 +88,7 @@ void	ft_vars_init(t_vars	*vars);
 void	ft_hooks(t_vars *vars);
 
 void	ft_file_close(int fd, t_vars *vars);
-void	ft_error(char *msg, t_vars *vars, char **splitted_str);
+void	ft_error(char *msg, t_vars *vars, char **splitted_str, int status);
 
 void	ft_draw(t_vars *vars);
 

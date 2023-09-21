@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:51:20 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/18 16:45:12 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 17:01:29 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void	**ft_free_map(t_vars *vars)
+void	**ft_free_map_point(t_vars *vars)
 {
 	int	i;
 
@@ -26,6 +26,20 @@ void	**ft_free_map(t_vars *vars)
 		i++;
 	}
 	free(vars->map.points);
+	return (NULL);
+}
+
+void	**ft_free_r_map(t_vars *vars)
+{
+	int	i;
+
+	i = 0;
+	while (i < vars->map.axis)
+	{
+		free((vars->r_map)[i]);
+		i++;
+	}
+	free(vars->r_map);
 	return (NULL);
 }
 
@@ -48,17 +62,22 @@ void	ft_file_close(int fd, t_vars *vars)
 	if (close(fd) == -1)
 	{
 		if (vars != NULL)
-			ft_free_map(vars);
+			ft_free_map_point(vars);
 		perror("File close error");
 		exit(EXIT_FAILURE);
 	}
 }
 
-void	ft_error(char *msg, t_vars *vars, char **splitted_str)
+void	ft_error(char *msg, t_vars *vars, char **splitted_str, int status)
 {
 	perror(msg);
-	if (vars != NULL)
-		ft_free_map(vars);
+	if (vars != NULL && status == 0)
+		ft_free_map_point(vars);
+	if (vars != NULL && status == 1)
+	{
+		ft_free_map_point(vars);
+		ft_free_r_map(vars);
+	}
 	if (splitted_str != NULL)
 		ft_free_tab(splitted_str);
 	exit(EXIT_FAILURE);

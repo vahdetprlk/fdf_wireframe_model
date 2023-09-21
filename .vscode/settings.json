@@ -20,6 +20,7 @@
 		"cmath": "c",
 		"_xlocale.h": "c",
 		"_wchar_t.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"algorithm": "c"
 	}
 }

@@ -6,14 +6,13 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 00:39:39 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 17:26:27 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "mlx.h"
 #include <unistd.h>
-#include <stdio.h>
 #include <math.h>
 
 void	ft_clear_win(t_vars *vars)
@@ -69,9 +68,7 @@ void	ft_calculate_offset(t_vars	*vars)
 int	ft_loop_mlx(t_vars *vars)
 {
 	ft_clear_win(vars);
-	printf("%f, %f\n", vars->origin.x, vars->origin.y);
 	ft_draw(vars);
-
 	mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
 	return (0);
 }
@@ -87,8 +84,6 @@ int	main(int argc, char **argv)
 		ft_vars_init(vars);
 		ft_calculate_offset(vars);
 		mlx_loop_hook(vars->m.mlx, ft_loop_mlx, vars);
-		// ft_draw(vars);
-		// mlx_put_image_to_window(vars->m.mlx, vars->m.win, vars->img_ptr, 0, 0);
 		ft_hooks(vars);
 		mlx_loop(vars->m.mlx);
 	}
