@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:22:32 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 01:58:16 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/22 02:32:31 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,23 @@ static int	ft_close_x(t_vars *vars)
 	mlx_destroy_window(vars->m.mlx, vars->m.win);
 	exit(EXIT_SUCCESS);
 	return (1);
+}
+
+static void	ft_key_press_cont(int keycode, t_vars *vars)
+{
+	if (keycode == 6)
+	{
+		if (vars->projection == 0)
+			vars->projection = 1;
+		else if (vars->projection == 1)
+			vars->projection = 0;
+	}
+	if (keycode == 38)
+		if (vars->angle <= 47)
+			vars->angle++;
+	if (keycode == 40)
+		if (vars->angle >= 10)
+			vars->angle--;
 }
 
 static int	ft_key_press(int keycode, t_vars *vars)
@@ -41,17 +58,7 @@ static int	ft_key_press(int keycode, t_vars *vars)
 		vars->j += 4;
 	if (keycode == 5)
 		vars->j -= 4;
-	if (keycode == 6)
-	{
-		if (vars->projection == 0)
-			vars->projection = 1;
-		else if (vars->projection == 1)
-			vars->projection = 0;
-	}
-	if (keycode == 38)
-		vars->z_offset++;
-	if (keycode == 40)
-		vars->z_offset--;
+	ft_key_press_cont(keycode, vars);
 	return (1);
 }
 

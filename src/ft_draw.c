@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 02:00:32 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/22 02:45:28 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	ft_set_r_map(t_vars *vars)
 		{
 			vars->r_map[x][y].x = (x * vars->offset) + vars->origin.x;
 			vars->r_map[x][y].y = (y * vars->offset) + vars->origin.y;
-			vars->r_map[x][y].z = (vars->map.points[x][y].z * vars->z_offset);
+			vars->r_map[x][y].z = (vars->map.points[x][y].z * vars->offset);
 			y++;
 		}
 		x++;
@@ -102,8 +102,6 @@ void	ft_draw(t_vars *vars)
 	ft_set_r_map(vars);
 	if (vars->projection == 0)
 		ft_projection_iso(vars);
-	// else
-	// 	ft_projection_conic(vars);
 	ft_draw_axis(vars);
 	ft_draw_ordinate(vars);
 }

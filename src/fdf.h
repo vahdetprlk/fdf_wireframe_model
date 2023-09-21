@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 01:56:17 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/22 02:41:05 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,16 @@ typedef struct s_color
 
 typedef struct s_point
 {
-	float	x;
-	float	y;
+	int		x;
+	int		y;
 	t_color	color;
 }	t_point;
 
 typedef struct s_render_map
 {
-	double	x;
-	double	y;
-	double	z;
+	int	x;
+	int	y;
+	int	z;
 }	t_render_map;
 
 typedef struct s_point_arr
@@ -69,7 +69,6 @@ typedef struct s_vars
 	void			*img_ptr;
 	double			x_offset;
 	double			y_offset;
-	double			z_offset;
 	float			offset;
 	int				i;
 	int				j;

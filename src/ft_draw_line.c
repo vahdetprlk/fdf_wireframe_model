@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 14:47:14 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 01:04:02 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/22 02:40:30 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,12 @@ void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars)
 
 	is_steep = ft_swap_origins(&point_1, &point_2);
 	if (is_steep)
-		ft_draw_pixel(round(point_1.y), round(point_1.x), 1, vars);
+		ft_draw_pixel(point_1.y, point_1.x, 1, vars);
 	else
-		ft_draw_pixel(round(point_1.x), round(point_1.y), 1, vars);
+		ft_draw_pixel(point_1.x, point_1.y, 1, vars);
 	if (is_steep)
-		ft_draw_pixel(round(point_2.y), round(point_2.x), 1, vars);
+		ft_draw_pixel(point_2.y, point_2.x, 1, vars);
 	else
-		ft_draw_pixel(round(point_2.x), round(point_2.y), 1, vars);
+		ft_draw_pixel(point_2.x, point_2.y, 1, vars);
 	ft_draw_loop(point_1, point_2, is_steep, vars);
 }

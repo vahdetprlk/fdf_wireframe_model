@@ -6,15 +6,15 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:05:34 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 23:20:37 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/22 02:59:01 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <stdlib.h>
 #include <fcntl.h>
-// #include <stdio.h>
 #include "get_next_line.h"
+#include <unistd.h>
 
 static int	ft_find_axis(char *file, int *fd)
 {
@@ -28,6 +28,12 @@ static int	ft_find_axis(char *file, int *fd)
 	if (!first_line)
 		ft_error("File reading error", NULL, NULL, 0);
 	axis = ft_count_axis(first_line);
+	if (axis < 2)
+	{
+		write(2, "Axis has to greather than 1\n", 28);
+		free(first_line);
+		exit(EXIT_FAILURE);
+	}
 	free(first_line);
 	return (axis);
 }
@@ -39,7 +45,10 @@ static int	ft_find_ordinate(int fd, int axis)
 
 	line = get_next_line(fd);
 	if (!line)
-		ft_error("File reading error", NULL, NULL, 0);
+	{
+		write(2, "Ordinate has to greather than 1\n", 32);
+		exit(EXIT_FAILURE);
+	}
 	ft_check_axis(line, axis);
 	ordinate = 2;
 	while (line)
@@ -91,7 +100,7 @@ static void	ft_init_r_map(t_vars *vars)
 	}
 }
 
-void	ft_check_map(char *file, t_vars *vars) // eğer harita 2x2 den küçükse bir ayar çekilecek yerler var
+void	ft_check_map(char *file, t_vars *vars)
 {
 	int	fd;
 
