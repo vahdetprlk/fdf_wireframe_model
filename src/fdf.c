@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:53:27 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 23:19:54 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/22 00:14:04 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,15 @@ static void	ft_calculate_offset(t_vars	*vars)
 	if (HEIGHT / y_offset > WIDTH / x_offset)
 	{
 		vars->x_offset = x_offset;
-		vars->y_offset = x_offset * tan(30 * M_PI / 180);
-		vars->offset = y_offset / sin(30 * M_PI / 180);
+		vars->y_offset = x_offset * tan(vars->angle * M_PI / 180);
+		vars->offset = y_offset / sin(vars->angle * M_PI / 180);
 	}
 	else
 	{
-		vars->x_offset = y_offset / tan(30 * M_PI / 180);
+		vars->x_offset = y_offset / tan(vars->angle * M_PI / 180);
 		vars->y_offset = y_offset;
-		vars->offset = y_offset / sin(30 * M_PI / 180);
+		vars->offset = y_offset / sin(vars->angle * M_PI / 180);
 	}
-	vars->i = 0;
 }
 
 static int	ft_loop_mlx(t_vars *vars)
@@ -85,7 +84,7 @@ int	main(int argc, char **argv)
 	if (argc == 2)
 	{
 		vars = &(t_vars){0};
-		vars->angle = 30;
+		vars->angle = 33;
 		ft_check_map(argv[1], vars);
 		ft_vars_init(vars);
 		ft_calculate_offset(vars);

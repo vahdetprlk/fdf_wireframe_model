@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 23:03:24 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 23:23:11 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/21 23:50:43 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	ft_rotation_origin(t_vars *vars)
 	}
 }
 
-void	ft_projection(t_vars *vars)
+void	ft_projection_iso(t_vars *vars)
 {
 	t_point			point;
 	int				x;

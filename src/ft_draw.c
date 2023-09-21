@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 23:21:34 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/22 00:04:11 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,28 @@ static void	ft_draw_axis(t_vars *vars)
 
 void	ft_draw(t_vars *vars)
 {
-	vars->origin.x = ((WIDTH - ((vars->map.axis + vars->map.ordinate)
-					* vars->x_offset)) / 2)
-		+ (vars->x_offset * vars->map.ordinate);
-	vars->origin.y = ((HEIGHT - ((vars->map.axis + vars->map.ordinate)
-					* vars->y_offset)) / 2) + (vars->y_offset);
+	if (vars->projection == 0)
+	{
+		vars->origin.x = ((WIDTH - ((vars->map.axis + vars->map.ordinate)
+						* vars->x_offset)) / 2)
+			+ (vars->x_offset * vars->map.ordinate);
+		vars->origin.y = ((HEIGHT - ((vars->map.axis + vars->map.ordinate)
+						* vars->y_offset)) / 2) + (vars->y_offset);
+	}
+	else
+	{
+		vars->origin.x = ((WIDTH - (vars->offset
+						* (vars->map.axis))) + vars->offset) / 2;
+		vars->origin.y = ((HEIGHT - (vars->offset
+						* (vars->map.ordinate))) + vars->offset) / 2;
+	}
 	vars->origin.x += vars->i;
 	vars->origin.y += vars->j;
 	ft_set_r_map(vars);
-	ft_projection(vars);
+	if (vars->projection == 0)
+		ft_projection_iso(vars);
+	// else
+	// 	ft_projection_conic(vars);
 	ft_draw_axis(vars);
 	ft_draw_ordinate(vars);
 }
