@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:23:41 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 03:54:17 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/23 18:51:00 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	ft_count_axis(char *line)
 	int		axis;
 	char	**splitted_line;
 
+	if (line[ft_strlen(line) - 1] == '\n')
+		line[ft_strlen(line) - 1] = 0;
 	splitted_line = ft_split(line, ' ');
 	if (!splitted_line)
 	{
