@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 17:05:37 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 02:45:28 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/23 03:39:00 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ static void	ft_set_r_map(t_vars *vars)
 
 static void	ft_draw_ordinate(t_vars *vars)
 {
-	t_point	p1;
-	t_point	p2;
 	int		x;
 	int		y;
 
@@ -45,11 +43,13 @@ static void	ft_draw_ordinate(t_vars *vars)
 		x = 1;
 		while (x < vars->map.axis)
 		{
-			p1.x = vars->r_map[x - 1][y - 1].x;
-			p1.y = vars->r_map[x - 1][y - 1].y;
-			p2.x = vars->r_map[x][y - 1].x;
-			p2.y = vars->r_map[x][y - 1].y;
-			ft_draw_line(p1, p2, vars);
+			vars->p1.x = vars->r_map[x - 1][y - 1].x;
+			vars->p1.y = vars->r_map[x - 1][y - 1].y;
+			vars->p1.color = vars->map.points[x - 1][y - 1].color;
+			vars->p2.x = vars->r_map[x][y - 1].x;
+			vars->p2.y = vars->r_map[x][y - 1].y;
+			vars->p2.color = vars->map.points[x][y - 1].color;
+			ft_draw_line(vars);
 			x++;
 		}
 		y++;
@@ -58,8 +58,6 @@ static void	ft_draw_ordinate(t_vars *vars)
 
 static void	ft_draw_axis(t_vars *vars)
 {
-	t_point	p1;
-	t_point	p2;
 	int		x;
 	int		y;
 
@@ -69,11 +67,13 @@ static void	ft_draw_axis(t_vars *vars)
 		y = 1;
 		while (y < vars->map.ordinate)
 		{
-			p1.x = vars->r_map[x - 1][y - 1].x;
-			p1.y = vars->r_map[x - 1][y - 1].y;
-			p2.x = vars->r_map[x - 1][y].x;
-			p2.y = vars->r_map[x - 1][y].y;
-			ft_draw_line(p1, p2, vars);
+			vars->p1.x = vars->r_map[x - 1][y - 1].x;
+			vars->p1.y = vars->r_map[x - 1][y - 1].y;
+			vars->p1.color = vars->map.points[x - 1][y - 1].color;
+			vars->p2.x = vars->r_map[x - 1][y].x;
+			vars->p2.y = vars->r_map[x - 1][y].y;
+			vars->p2.color = vars->map.points[x - 1][y].color;
+			ft_draw_line(vars);
 			y++;
 		}
 		x++;
@@ -94,14 +94,15 @@ void	ft_draw(t_vars *vars)
 	{
 		vars->origin.x = ((WIDTH - (vars->offset
 						* (vars->map.axis))) + vars->offset) / 2;
-		vars->origin.y = ((HEIGHT - (vars->offset
-						* (vars->map.ordinate))) + vars->offset) / 2;
+		vars->origin.y = HEIGHT / 2;
 	}
 	vars->origin.x += vars->i;
 	vars->origin.y += vars->j;
 	ft_set_r_map(vars);
 	if (vars->projection == 0)
 		ft_projection_iso(vars);
+	else
+		ft_projection_parallel(vars);
 	ft_draw_axis(vars);
 	ft_draw_ordinate(vars);
 }

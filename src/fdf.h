@@ -6,15 +6,15 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 16:48:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 02:41:05 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/23 03:38:36 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 800
+# define HEIGHT 600
 
 typedef struct s_mlx
 {
@@ -22,18 +22,11 @@ typedef struct s_mlx
 	void	*win;
 }	t_mlx;
 
-typedef struct s_color
-{
-	int	red;
-	int	green;
-	int	blue;
-}	t_color;
-
 typedef struct s_point
 {
 	int		x;
 	int		y;
-	t_color	color;
+	int		color;
 }	t_point;
 
 typedef struct s_render_map
@@ -62,6 +55,9 @@ typedef struct s_vars
 	t_map			map;
 	t_render_map	**r_map;
 	t_point			origin;
+	t_point			p1;
+	t_point			p2;
+	int				render_color;
 	char			*data_addr;
 	int				size_line;
 	int				bpp;
@@ -73,8 +69,6 @@ typedef struct s_vars
 	int				i;
 	int				j;
 	int				angle;
-	int				min_z;
-	int				max_z;
 	int				projection;
 }	t_vars;
 
@@ -86,7 +80,7 @@ int		ft_atoi(const char *str);
 int		ft_atoi_hex(const char *str);
 void	*ft_calloc(int count, int size);
 void	ft_bzero(void *s, int n);
-void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars);
+void	ft_draw_line(t_vars *vars);
 
 float	ft_fpart(float x);
 float	ft_rfpart(float x);
@@ -106,5 +100,6 @@ void	ft_error(char *msg, t_vars *vars, char **splitted_str, int status);
 
 void	ft_draw(t_vars *vars);
 void	ft_projection_iso(t_vars *vars);
+void	ft_projection_parallel(t_vars *vars);
 
 #endif

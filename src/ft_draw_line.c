@@ -6,37 +6,37 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 14:47:14 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 02:40:30 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/23 03:37:07 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <math.h>
 
-static int	ft_swap_origins(t_point *point_1, t_point *point_2)
+static int	ft_swap_origins(t_vars *vars)
 {
 	int	is_steep;
 	int	temp;
 
-	is_steep = ft_abs(point_2->y - point_1->y)
-		> ft_abs(point_2->x - point_1->x);
+	is_steep = ft_abs(vars->p2.y - vars->p1.y)
+		> ft_abs(vars->p2.x - vars->p1.x);
 	if (is_steep)
 	{
-		temp = point_1->x;
-		point_1->x = point_1->y;
-		point_1->y = temp;
-		temp = point_2->x;
-		point_2->x = point_2->y;
-		point_2->y = temp;
+		temp = vars->p1.x;
+		vars->p1.x = vars->p1.y;
+		vars->p1.y = temp;
+		temp = vars->p2.x;
+		vars->p2.x = vars->p2.y;
+		vars->p2.y = temp;
 	}
-	if (point_1->x > point_2->x)
+	if (vars->p1.x > vars->p2.x)
 	{
-		temp = point_1->x;
-		point_1->x = point_2->x;
-		point_2->x = temp;
-		temp = point_1->y;
-		point_1->y = point_2->y;
-		point_2->y = temp;
+		temp = vars->p1.x;
+		vars->p1.x = vars->p2.x;
+		vars->p2.x = temp;
+		temp = vars->p1.y;
+		vars->p1.y = vars->p2.y;
+		vars->p2.y = temp;
 	}
 	return (is_steep);
 }
@@ -44,7 +44,9 @@ static int	ft_swap_origins(t_point *point_1, t_point *point_2)
 static void	ft_draw_pixel(int x, int y, float brightness, t_vars *vars)
 {
 	int	offset;
+	int	color;
 
+	color = vars->render_color;
 	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
 	{
 		offset = y * (vars->size_line) + x * ((vars->bpp) / 8);
@@ -52,9 +54,9 @@ static void	ft_draw_pixel(int x, int y, float brightness, t_vars *vars)
 			&& vars->data_addr[offset + 1] < 127
 			&& vars->data_addr[offset + 2] < 127)
 		{
-			vars->data_addr[offset] = 0x00 * brightness;
-			vars->data_addr[offset + 1] = 0x7F * brightness;
-			vars->data_addr[offset + 2] = 0xFF * brightness;
+			vars->data_addr[offset] = (color & 0xFF) * brightness;
+			vars->data_addr[offset + 1] = ((color >> 8) & 0xFF) * brightness;
+			vars->data_addr[offset + 2] = ((color >> 16) & 0xFF) * brightness;
 		}
 	}
 }
@@ -77,16 +79,16 @@ static void	ft_draw_pixel_loop(int is_steep, float intery, int x, t_vars *vars)
 	}
 }
 
-static void	ft_draw_loop(t_point p1, t_point p2, int is_steep, t_vars *vars)
+static void	ft_draw_loop(int is_steep, t_vars *vars)
 {
 	int		x;
 	float	gradient;
 	float	intery;
 
-	gradient = (float)(p2.y - p1.y) / (p2.x - p1.x);
-	intery = p1.y + gradient;
-	x = p1.x + 1;
-	while (x <= p2.x)
+	gradient = (float)(vars->p2.y - vars->p1.y) / (vars->p2.x - vars->p1.x);
+	intery = vars->p1.y + gradient;
+	x = vars->p1.x + 1;
+	while (x <= vars->p2.x)
 	{
 		ft_draw_pixel_loop(is_steep, intery, x, vars);
 		intery += gradient;
@@ -94,18 +96,24 @@ static void	ft_draw_loop(t_point p1, t_point p2, int is_steep, t_vars *vars)
 	}
 }
 
-void	ft_draw_line(t_point point_1, t_point point_2, t_vars *vars)
+void	ft_draw_line(t_vars *vars)
 {
 	int		is_steep;
 
-	is_steep = ft_swap_origins(&point_1, &point_2);
+	if (vars->p1.color == 0)
+		vars->p1.color = 0xFF7F00;
+	vars->render_color = vars->p1.color;
+	is_steep = ft_swap_origins(vars);
 	if (is_steep)
-		ft_draw_pixel(point_1.y, point_1.x, 1, vars);
+		ft_draw_pixel(vars->p1.y, vars->p1.x, 1, vars);
 	else
-		ft_draw_pixel(point_1.x, point_1.y, 1, vars);
+		ft_draw_pixel(vars->p1.x, vars->p1.y, 1, vars);
+	if (vars->p2.color == 0)
+		vars->p2.color = 0xFF7F00;
+	vars->render_color = vars->p2.color;
 	if (is_steep)
-		ft_draw_pixel(point_2.y, point_2.x, 1, vars);
+		ft_draw_pixel(vars->p2.y, vars->p2.x, 1, vars);
 	else
-		ft_draw_pixel(point_2.x, point_2.y, 1, vars);
-	ft_draw_loop(point_1, point_2, is_steep, vars);
+		ft_draw_pixel(vars->p2.x, vars->p2.y, 1, vars);
+	ft_draw_loop(is_steep, vars);
 }

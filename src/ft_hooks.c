@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:22:32 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/22 04:14:12 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/23 01:55:00 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ static void	ft_key_press_cont(int keycode, t_vars *vars)
 		else if (vars->projection == 1)
 			vars->projection = 0;
 	}
+	if (keycode == 7)
+	{
+		if (vars->angle != 30)
+			vars->angle = 30;
+	}
 	if (keycode == 38)
 		if (vars->angle <= 47)
 			vars->angle++;
@@ -51,13 +56,13 @@ static int	ft_key_press(int keycode, t_vars *vars)
 		if (vars->offset > 2)
 			vars->offset--;
 	if (keycode == 2)
-		vars->i += 4;
+		vars->i += 10;
 	if (keycode == 3)
-		vars->i -= 4;
+		vars->i -= 10;
 	if (keycode == 4)
-		vars->j += 4;
+		vars->j += 10;
 	if (keycode == 5)
-		vars->j -= 4;
+		vars->j -= 10;
 	ft_key_press_cont(keycode, vars);
 	return (1);
 }

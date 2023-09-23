@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 23:03:24 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/21 23:50:43 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/23 01:07:21 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,29 @@ void	ft_projection_iso(t_vars *vars)
 					(180 - (90 + vars->angle)) - vars->angle);
 			vars->r_map[x][y].x = point.x;
 			vars->r_map[x][y].y = point.y - vars->r_map[x][y].z;
+			y++;
+		}
+		x++;
+	}
+}
+
+void	ft_projection_parallel(t_vars *vars)
+{
+	int				x;
+	int				y;
+
+	x = 0;
+	vars->origin.x = ((WIDTH - (vars->offset
+					* (vars->map.axis))) + vars->offset) / 2;
+	vars->origin.y = HEIGHT / 2;
+	while (x < vars->map.axis)
+	{
+		y = 0;
+		vars->origin.x = vars->r_map[x][y].x;
+		vars->origin.y = vars->r_map[x][y].y;
+		while (y < vars->map.ordinate)
+		{
+			vars->r_map[x][y].y = vars->origin.y - vars->r_map[x][y].z;
 			y++;
 		}
 		x++;
